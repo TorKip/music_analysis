@@ -1,8 +1,12 @@
-import aggregate, sys
+import aggregate
+import sys
+
 
 help_text = {
     "general": "here will be help soon"
 }
+
+
 def welcome_info():
     version = 0.0
     welcome = "Velkommen til <ubestemt navn>"
@@ -11,7 +15,7 @@ def welcome_info():
 
 
 if __name__ == "__main__":
-    parameters = sys.argv[1:] if len(sys.argv) >1 else None
+    parameters = sys.argv[1:] if len(sys.argv) > 1 else None
     if not parameters:
         print(welcome_info())
     while parameters:
@@ -35,5 +39,4 @@ if __name__ == "__main__":
             pass
         elif parameter == "--process" or parameter == "-P":
             aggregate.process_statistics()
-    
     # process_statistics('StreamingHistory.json')
