@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 
 
 def plot_polar(stat_entry):
-    N = len(stat_entry['data'])
-    theta = np.linspace(0.0, 2 * np.pi, N, endpoint=False)
+    data_length = len(stat_entry['data'])
+    theta = np.linspace(0.0, 2 * np.pi, data_length, endpoint=False)
     radii = stat_entry['data']
-    width = 2 * np.pi / N
+    width = 2 * np.pi / data_length
     ax = plt.subplot(111, projection='polar')
     labels = ["{}:00 - {}:00".format(x, x+1) for x in range(0, 24, 3)]
     ax.set_xticklabels(labels)
