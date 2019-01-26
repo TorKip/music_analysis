@@ -16,14 +16,14 @@ def welcome_info():
 
 if __name__ == "__main__":
     parameters = sys.argv[1:] if len(sys.argv) > 1 else None
+    print("Running \"spot if i\" why with parameters:{}".format(parameters))
     if not parameters:
         print(welcome_info())
     while parameters:
-        parameter = parameters.pop()
+        parameter = parameters.pop(0)
         if parameter == "--aggregate" or parameter == "-A":
-            parameter = parameters.pop() if len(parameters) > 0 else None
+            parameter = parameters.pop(0) if len(parameters) > 0 else None
             if parameter == "--spotify" or parameter == "-s":
-                pass
                 aggregate.create_history('spotify')
             elif parameter == "--lastfm" or parameter == "-lfm":
                 aggregate.create_history('lastfm')

@@ -6,8 +6,8 @@ import spot_utils
 # import sys
 
 
-spotify_filename = "StreamingHistory.json"
-lastfm_filename = "lastfmdata/test.json"
+spotify_filename = "music_history/SpotifyTest.json"
+lastfm_filename = "music_history/LastFmTest.json"
 aggregate_filename = "AggregatedHistory.json"
 
 
@@ -15,13 +15,12 @@ def create_history(option="all"):
     if option == "spotify":
         history = load_json_history(spotify_filename)
     elif option == "lastfm":
-        # history = load_json_history(lastfm_filename)
-        pass
+        history = load_json_history(lastfm_filename)
     else:   # option should be all
         history = []
         history.extend(load_json_history(spotify_filename))
         # history.append(load_json_history(lastfm_filename))
-    aggregated_data = aggregate_history(history)
+    aggregated_data = aggregate_history(history, option)
     # print(aggregated_data["aggregated_dict"][])
     save_json_history(aggregate_filename, aggregated_data)
 
@@ -38,19 +37,20 @@ def load_json_history(filename):
 
 def save_json_history(filename, data):
     try:
-        with open(filename, "w", encoding='utf-8') as aggregated_file:
+        with open(filename, "w+", encoding='utf-8') as aggregated_file:
             json.dump(data, aggregated_file, ensure_ascii=False)
     except IOError as er:
         print(er)
 
 
 def aggregate_history(play_history_list, source="spotify"):
+    print("aggregating history from source: {}".format(source))
     keys = {
         "spotify": {
             "artist": "artistName",
             "track": "trackName",
             "dateTime": "endTime"},
-        "lastFM": {
+        "lastfm": {
             "artist": "artist",
             "track": "name",
             "dateTime": "date"}
@@ -69,7 +69,9 @@ def aggregate_history(play_history_list, source="spotify"):
         track = p[track_key] if source == "spotify" else p[track_key]
         key = "{}###{}".format(artist, track)
         if key not in aggregated_dict.keys():
+            spotify_id = spot_utils.get_spotify_id(trackname=track, artist=artist)
             aggregated_dict[key] = {
+                "spotifyId": spotify_id,
                 "artistName": artist,
                 "trackName": track,
                 'endTimeList':
