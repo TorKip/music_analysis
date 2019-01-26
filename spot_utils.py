@@ -1,11 +1,12 @@
 import spotipy
-
+import json
+    
 
 def parse_date(datestring):
     months = {
         "Dec": "12",
         "Nov": "11",
-        "Okt": "10",
+        "Oct": "10",
         "Sep": "09",
         "Aug": "08",
         "Jul": "07",
@@ -33,3 +34,19 @@ def get_spotify_id(trackname="", artist="", album=""):
 
 
 # get_spotify_id("Sometimes")
+def load_json_history(filename):
+    try:
+        with open(filename, 'r', encoding='utf-8') as history_file:
+            history = json.load(history_file)
+    except IOError as er:
+        print(er)
+        history = []
+    return history
+
+
+def save_json_history(filename, data):
+    try:
+        with open(filename, "w", encoding='utf-8') as aggregated_file:
+            json.dump(data, aggregated_file,indent=4, ensure_ascii=False)
+    except IOError as er:
+        print(er)
