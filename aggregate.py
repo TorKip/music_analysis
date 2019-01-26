@@ -6,8 +6,8 @@ import spot_utils
 # import sys
 
 
-spotify_filename = "StreamingHistory.json"
-lastfm_filename = "lastfmdata/test.json"
+spotify_filename = "music_history/SpotifyTest.json"
+lastfm_filename = "music_history/LastFmTest.json"
 aggregate_filename = "AggregatedHistory.json"
 
 
