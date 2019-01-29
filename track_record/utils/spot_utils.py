@@ -32,7 +32,6 @@ def get_spotify_id(trackname="", artist="", album=""):
     results = ""    # Until Spotify api is set up
     return results
 
-
 # get_spotify_id("Sometimes")
 def load_json_history(filename):
     try:
@@ -43,10 +42,9 @@ def load_json_history(filename):
         history = []
     return history
 
-
 def save_json_history(filename, data):
     try:
         with open(filename, "w", encoding='utf-8') as aggregated_file:
-            json.dump(data, aggregated_file,indent=4, ensure_ascii=False)
+            json.dump(data, aggregated_file, indent=4, ensure_ascii=False)
     except IOError as er:
         print(er)

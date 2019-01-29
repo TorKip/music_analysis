@@ -1,14 +1,14 @@
 import json
 # import numpy as np
 # import matplotlib.pyplot as plt
-import visualize
-import spot_utils
+import track_record.postprocess.visualize as visualize
+from track_record.utils.spot_utils import parse_date, get_spotify_id
 # import sys
 
 
-spotify_filename = "music_history/SpotifyTest.json"
-lastfm_filename = "music_history/LastFmTest.json"
-aggregate_filename = "AggregatedHistory.json"
+spotify_filename = "track_record/music_history/SpotifyTest.json"
+lastfm_filename = "track_record/music_history/LastFmTest.json"
+aggregate_filename = "track_record/music_history/AggregatedHistory.json"
 
 
 def create_history(option="all"):
@@ -38,7 +38,7 @@ def load_json_history(filename):
 def save_json_history(filename, data):
     try:
         with open(filename, "w+", encoding='utf-8') as aggregated_file:
-            json.dump(data, aggregated_file, ensure_ascii=False)
+            json.dump(data, aggregated_file, indent=4, ensure_ascii=False)
     except IOError as er:
         print(er)
 
@@ -69,14 +69,14 @@ def aggregate_history(play_history_list, source="spotify"):
         track = p[track_key] if source == "spotify" else p[track_key]
         key = "{}###{}".format(artist, track)
         if key not in aggregated_dict.keys():
-            spotify_id = spot_utils.get_spotify_id(trackname=track, artist=artist)
+            spotify_id = get_spotify_id(trackname=track, artist=artist)
             aggregated_dict[key] = {
                 "spotifyId": spotify_id,
                 "artistName": artist,
                 "trackName": track,
                 'endTimeList':
                     [p[time_date_key] if source == "spotify"
-                        else spot_utils.parse_date(
+                        else parse_date(
                             p[time_date_key]["#text"])],
                 'timesPlayed': 1
                 }
@@ -101,16 +101,16 @@ def aggregate_history(play_history_list, source="spotify"):
     return data
 
 
-def get_most_played_song(play_list):
-    most_played_song = play_list[0]
+def get_most_played_track(play_list):
+    most_played_track = play_list[0]
     timespan = "."  # get timespan from endTimeList
     stat_entry = {
-        'stat_title': 'Most played song',
+        'stat_title': 'Most played track',
         'flavour_text':
             "\"{}\" by {} was played {} times{}".format(
-                                            most_played_song['trackName'],
-                                            most_played_song['artistName'],
-                                            most_played_song['timesPlayed'],
+                                            most_played_track['trackName'],
+                                            most_played_track['artistName'],
+                                            most_played_track['timesPlayed'],
                                             timespan),
         'graph': False}
     return stat_entry
@@ -118,15 +118,15 @@ def get_most_played_song(play_list):
 
 def get_hourly_rate(play_list):
     hourly_plays = [0 for x in range(24)]
-    for song in play_list:
-        for p in song['endTimeList']:
+    for track in play_list:
+        for p in track['endTimeList']:
             time = int(p.split()[1].split(':')[0])
             hourly_plays[time] += 1
 
     stat_entry = {
         'stat_title': 'Plays at time of day',
         'flavour_text':
-            'This stat shows at what time of day songs have been played',
+            'This stat shows at what time of day tracks have been played',
         'graph': True,
         'graph_type': 'polar_bar',
         'radial_axis': [x for x in range(24)],
@@ -141,7 +141,7 @@ def make_stat_dict(list_dict_tuple):
     play_list = list_dict_tuple[0]
     # play_dict = list_dict_tuple[1]
     stat_dict = {}
-    stat_dict['Most_played_song'] = get_most_played_song(play_list)
+    stat_dict['Most_played_track'] = get_most_played_track(play_list)
     stat_dict['Hourly_plays'] = get_hourly_rate(play_list)
     return stat_dict
 

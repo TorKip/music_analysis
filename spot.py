@@ -1,6 +1,7 @@
-import aggregate
 import sys
-import preprocess
+from track_record.preprocess import aggregate, preprocess
+from track_record.postprocess import visualize
+from track_record.utils import db_tools, spot_utils
 
 
 help_text = {
@@ -9,7 +10,7 @@ help_text = {
 
 
 def welcome_info():
-    version = 0.0
+    version = 0.1
     welcome = "Velkommen til <ubestemt navn>"
     help = help_text["general"]
     print("{} \n Versjon nummer: {} \n {}".format(welcome, version, help))
@@ -20,7 +21,6 @@ if __name__ == "__main__":
     print("Running \"spot if i\" why with parameters:{}".format(parameters))
     if not parameters:
         print(welcome_info())
-    print(parameters)
     while parameters:
         parameter = parameters.pop(0)
         if parameter == "--aggregate" or parameter == "-A":

@@ -1,20 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 
-'''
-id primary key
-str name - not null
-str mbid
-str etc
-'''
-'''
-id primary key
-str song name - not null
-str mbid
-date/int timeplayed
-fkey artist
-str etc
-'''
+
 
 sqlite_create_spotify_artists_table = """ CREATE TABLE IF NOT EXISTS artists (
         id integer PRIMARY KEY,
@@ -33,7 +20,7 @@ sqlite_create_spotify_albums_table = """ CREATE TABLE IF NOT EXISTS albums (
         FOREIGN KEY (artist_id) REFERENCES artists (id)
     );"""
 
-sqlite_create_spotify_songs_table = """ CREATE TABLE IF NOT EXISTS songs (
+sqlite_create_spotify_tracks_table = """ CREATE TABLE IF NOT EXISTS tracks (
         id integer PRIMARY KEY, 
         name text NOT NULL,
         mbid text,
@@ -69,13 +56,13 @@ def create_table(conn, create_table_sql):
 def create_tables(conn):
     create_table(conn, sqlite_create_spotify_artists_table)
     create_table(conn, sqlite_create_spotify_albums_table)
-    create_table(conn, sqlite_create_spotify_songs_table)
+    create_table(conn, sqlite_create_spotify_tracks_table)
 
-def add_song(conn, name, mbid="", spid="", end_time="", artist_id=None, album_id=None):
-    sql = """ INSERT INTO songs(name, mbid, spid, end_time, artist_id, album_id) VALUES(?,?,?,?,?,?) """
-    song = (name, mbid, spid, end_time, artist_id, album_id)
+def add_track(conn, name, mbid="", spid="", end_time="", artist_id=None, album_id=None):
+    sql = """ INSERT INTO tracks(name, mbid, spid, end_time, artist_id, album_id) VALUES(?,?,?,?,?,?) """
+    track = (name, mbid, spid, end_time, artist_id, album_id)
     cur = conn.cursor()
-    cur.execute(sql, song)
+    cur.execute(sql, track)
     return cur.lastrowid
 
 def add_album(conn, name, mbid="", spid="", artist_id=None):

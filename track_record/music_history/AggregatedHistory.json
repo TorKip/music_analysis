@@ -1,0 +1,153 @@
+{
+    "aggregated_list": [
+        {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Beelzeboss (The Final Showdown)",
+            "endTimeList": [
+                "2018-07-03 12:12",
+                "2018-07-03 12:18"
+            ],
+            "timesPlayed": 2
+        },
+        {
+            "spotifyId": "",
+            "artistName": "Erasure",
+            "trackName": "A Little Respect - 2009 Remastered Version",
+            "endTimeList": [
+                "2018-07-02 20:34"
+            ],
+            "timesPlayed": 1
+        },
+        {
+            "spotifyId": "",
+            "artistName": "Erasure",
+            "trackName": "Love to Hate You",
+            "endTimeList": [
+                "2018-07-02 20:39"
+            ],
+            "timesPlayed": 1
+        },
+        {
+            "spotifyId": "",
+            "artistName": "Erasure",
+            "trackName": "Sometimes",
+            "endTimeList": [
+                "2018-07-02 20:40"
+            ],
+            "timesPlayed": 1
+        },
+        {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Kickapoo",
+            "endTimeList": [
+                "2018-07-03 14:24"
+            ],
+            "timesPlayed": 1
+        },
+        {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Rize of the Fenix",
+            "endTimeList": [
+                "2018-07-03 14:30"
+            ],
+            "timesPlayed": 1
+        },
+        {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Low Hangin' Fruit",
+            "endTimeList": [
+                "2018-07-03 14:33"
+            ],
+            "timesPlayed": 1
+        },
+        {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Classical Teacher",
+            "endTimeList": [
+                "2018-07-03 14:36"
+            ],
+            "timesPlayed": 1
+        }
+    ],
+    "aggregated_dict": {
+        "Erasure###A Little Respect - 2009 Remastered Version": {
+            "spotifyId": "",
+            "artistName": "Erasure",
+            "trackName": "A Little Respect - 2009 Remastered Version",
+            "endTimeList": [
+                "2018-07-02 20:34"
+            ],
+            "timesPlayed": 1
+        },
+        "Erasure###Love to Hate You": {
+            "spotifyId": "",
+            "artistName": "Erasure",
+            "trackName": "Love to Hate You",
+            "endTimeList": [
+                "2018-07-02 20:39"
+            ],
+            "timesPlayed": 1
+        },
+        "Erasure###Sometimes": {
+            "spotifyId": "",
+            "artistName": "Erasure",
+            "trackName": "Sometimes",
+            "endTimeList": [
+                "2018-07-02 20:40"
+            ],
+            "timesPlayed": 1
+        },
+        "Tenacious D###Beelzeboss (The Final Showdown)": {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Beelzeboss (The Final Showdown)",
+            "endTimeList": [
+                "2018-07-03 12:12",
+                "2018-07-03 12:18"
+            ],
+            "timesPlayed": 2
+        },
+        "Tenacious D###Kickapoo": {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Kickapoo",
+            "endTimeList": [
+                "2018-07-03 14:24"
+            ],
+            "timesPlayed": 1
+        },
+        "Tenacious D###Rize of the Fenix": {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Rize of the Fenix",
+            "endTimeList": [
+                "2018-07-03 14:30"
+            ],
+            "timesPlayed": 1
+        },
+        "Tenacious D###Low Hangin' Fruit": {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Low Hangin' Fruit",
+            "endTimeList": [
+                "2018-07-03 14:33"
+            ],
+            "timesPlayed": 1
+        },
+        "Tenacious D###Classical Teacher": {
+            "spotifyId": "",
+            "artistName": "Tenacious D",
+            "trackName": "Classical Teacher",
+            "endTimeList": [
+                "2018-07-03 14:36"
+            ],
+            "timesPlayed": 1
+        }
+    },
+    "meta_dict": {}
+}

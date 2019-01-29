@@ -1,9 +1,9 @@
-from spot_utils import load_json_history, save_json_history, parse_date
+from track_record.utils.spot_utils import load_json_history, save_json_history, parse_date
 
-SPOTIFY_FILENAME = "music_history/SpotifyTest.json"
-# LASTFM_FILENAME = "music_history/LastFmTest.json"
-LASTFM_FILENAME = "C:/Users/Tor/Jottacloud/Egne prosjekter/Persondata/Musikkanalyse/lastfmdata/2017.json"
-CLEANED_FILENAME = "music_history/cleanlfm.json"
+SPOTIFY_FILENAME = "tracke_record/music_history/SpotifyTest.json"
+LASTFM_FILENAME = "track_record/music_history/LastFmTest.json"
+CLEANED_FILENAME = "track_record/music_history/cleanlfm.json"
+
 def clean_lfm_data(lfm_history):
     clean_history = []
     
@@ -17,7 +17,7 @@ def clean_lfm_data(lfm_history):
             "name":artist["#text"],
             "mbid":artist["mbid"]
         }
-        clean_entry["song"] = {
+        clean_entry["track"] = {
             "name": entry["name"],
             "mbid": entry["mbid"],
             "end_time": clean_entry["date"],
