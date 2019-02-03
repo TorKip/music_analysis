@@ -5,7 +5,11 @@ from track_record.utils import db_tools, spot_utils
 
 
 help_text = {
-    "general": "here will be help soon"
+    "general": "here will be help soon",
+    "commands":{
+        "aggregate": "to aggregate add attributes:  --aggregate|-A  and -s|-lfm ",
+        "preprocess": "to preprocess add attributes: --preprocess|-pp and -lfm "
+        }
 }
 
 
@@ -18,7 +22,7 @@ def welcome_info():
 
 if __name__ == "__main__":
     parameters = sys.argv[1:] if len(sys.argv) > 1 else None
-    print("Running \"spot if i\" why with parameters:{}".format(parameters))
+    print("Running \"spot if I\" why with parameters:{}".format(parameters))
     if not parameters:
         print(welcome_info())
     while parameters:
@@ -32,14 +36,14 @@ if __name__ == "__main__":
             elif not parameter:
                 aggregate.create_history()
             elif parameter == "--help" or parameter == "-h":
-                print("here comes help soon")
+                print(help_text["commands"]["aggregate"])
             else:
                 print("for help type --help or -h")
 
         elif parameter == '--mute' or parameter == "-m":
             pass
         elif parameter == "--help" or parameter == "-h":
-                print("here comes help soon")
+                print(help_text["general"])
 
         elif parameter == "--preprocess" or parameter == "-pp":
             
@@ -52,10 +56,12 @@ if __name__ == "__main__":
                 preprocess.save_clean_data('lastfm')
                 print("Done!")
             elif parameter == "--help" or parameter == "-h" or not parameter:
-                print("here comes help soon")
+                print(help_text["commands"]["preprocess"])
             else:
                 print("for help type --help or -h")
 
         elif parameter == "--process" or parameter == "-P":
             aggregate.process_statistics()
+        elif parameter == "-stest":
+            print(spot_utils.get_spotify_id(artist="ABBA"))
     # process_statistics('StreamingHistory.json')

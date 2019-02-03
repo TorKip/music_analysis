@@ -27,9 +27,10 @@ def parse_date(datestring):
 
 # spotipy interfacing
 def get_spotify_id(trackname="", artist="", album=""):
-    # spotify = spotipy.Spotify()
+    spotify = spotipy.Spotify()
     # results = spotify.search(q="track:" + trackname, type="track")
-    results = ""    # Until Spotify api is set up
+    results = spotify.search(q='artist:' + artist, type='artist')
+    # results = ""    # Until Spotify api is set up
     return results
 
 # get_spotify_id("Sometimes")
