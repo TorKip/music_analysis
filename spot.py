@@ -2,6 +2,7 @@ import sys
 from track_record.preprocess import aggregate, preprocess
 from track_record.postprocess import visualize
 from track_record.utils import db_tools, spot_utils
+from track_record.tests import db_tests
 
 
 help_text = {
@@ -59,9 +60,15 @@ if __name__ == "__main__":
                 print(help_text["commands"]["preprocess"])
             else:
                 print("for help type --help or -h")
+        
+        elif parameter == "--filldatabase" or preprocess == "-fd":
+            preprocess.fill_database()
 
         elif parameter == "--process" or parameter == "-P":
             aggregate.process_statistics()
+
+        elif parameter == "--test" or parameter == "-T":
+            db_tests.test_database_fill()
         elif parameter == "-stest":
             print(spot_utils.get_spotify_id(artist="ABBA"))
     # process_statistics('StreamingHistory.json')

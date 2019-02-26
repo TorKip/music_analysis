@@ -1,8 +1,11 @@
 from track_record.utils.spot_utils import load_json_history, save_json_history, parse_date
+import track_record.utils.db_tools as db
 
 SPOTIFY_FILENAME = "tracke_record/music_history/SpotifyTest.json"
 LASTFM_FILENAME = "track_record/music_history/LastFmTest.json"
 CLEANED_FILENAME = "track_record/music_history/cleanlfm.json"
+# DB_FILENAME = "trackrecord/music_history/history.db"
+DB_FILENAME = "history.db"
 
 def clean_lfm_data(lfm_history):
     clean_history = []
@@ -38,5 +41,8 @@ def save_clean_data(option="lastFm"):
         cleaned_data = clean_lfm_data(data)
         save_json_history(CLEANED_FILENAME, cleaned_data)
 
+def fill_database(history_filename=CLEANED_FILENAME, db_filename = DB_FILENAME):
+    json_history = load_json_history(history_filename)
+    db.fill_tables(json_history, db_filename)
 
 
