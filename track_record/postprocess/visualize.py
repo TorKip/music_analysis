@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import track_record.postprocess.stat_gen as stat_gen
 
 
 def plot_polar(stat_entry):
@@ -32,3 +33,9 @@ def cool_stat_print(stat_dict):
                 )
         else:
             plot_stat(stat_dict[key])
+
+def static_out():
+        print("total listens: " + str(stat_gen.count_total_listens()))
+        print("total tracks: " + str(stat_gen.count_total_tracks()))
+        print("total albums: " + str(stat_gen.count_total_albums()))
+        print("total artists: " + str(stat_gen.count_total_artists()))

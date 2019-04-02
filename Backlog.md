@@ -2,24 +2,23 @@
 
 
 ## Sprint 1:
-### - 07.02.19
-
+### - 02.04.2019
 - [x] Refactor "song" to "track" --DONE
 - [x] Add correct map-structure and setup/init for correct project configuration --DONE
 - [x] Change db to have entry, track, album, artist table --DONE
-- [ ] Add functionality to output:
-    - [ ] total listens
-    - [ ] number of unique tracks
-    - [ ] number of unique albums
-    - [ ] number of unique artists
-    - [ ] most listened track
-    - [ ] most listened album
-    - [ ] most listened artist
+- [x] Add functionality to output:
+    - [x] total listens
+    - [x] number of unique tracks
+    - [x] number of unique albums
+    - [x] number of unique artists
+    - [x] most listened track
+    - [x] most listened album
+    - [x] most listened artist
 - [x] Research pandas: is it right for this project, yes/no
     - yes.
     
 ## Sprint 2
-### 08.02.19 - 22.02.19
+### ??? - ???
 - [ ] Refactor program to use Pandas
 - [ ] Implement proper CLI tool
 - [ ] Connect to spotify:

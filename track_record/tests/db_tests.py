@@ -8,9 +8,17 @@ sqlite3
 TEST_DATA = "track_record/tests/test_data.json"
 DB_FILENAME = "test_database.db"
 
-def test_database_fill():
+def create_test_database():
     print("Creating test database")
     create_connection(DB_FILENAME)
+
+def delete_test_database():
+    print("Deleting test_database...")
+    remove(DB_FILENAME)
+    print("test_database deleted.")
+
+def test_database_fill():
+    
     fill_database(TEST_DATA, DB_FILENAME)
     conn = sqlite3.connect(DB_FILENAME)
     cur = conn.cursor()
@@ -25,9 +33,8 @@ def test_database_fill():
     print("tracks: \n{}\n".format(tracks))
     print("albums:\n{}\n".format(albums))
     print("artists:\n{}\n".format(artists))
-    print("Deleting test_database...")
-    remove(DB_FILENAME)
-    print("test_database deleted.")
+
+
 
 
     

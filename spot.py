@@ -1,8 +1,8 @@
 import sys
-from track_record.preprocess import aggregate, preprocess
-from track_record.postprocess import visualize
+from track_record.preprocess import preprocess
+from track_record.postprocess import aggregate, visualize
 from track_record.utils import db_tools, spot_utils
-from track_record.tests import db_tests
+from track_record.tests import test_main
 
 
 help_text = {
@@ -67,8 +67,12 @@ if __name__ == "__main__":
         elif parameter == "--process" or parameter == "-P":
             aggregate.process_statistics()
 
+        elif parameter == "--output" or parameter == "-O":
+            visualize.static_out()
+
         elif parameter == "--test" or parameter == "-T":
-            db_tests.test_database_fill()
+            test_main.run()
+            
         elif parameter == "-stest":
             print(spot_utils.get_spotify_id(artist="ABBA"))
     # process_statistics('StreamingHistory.json')

@@ -1,4 +1,5 @@
 import sqlite3
+from contextlib import closing
 from sqlite3 import Error
 
 
@@ -62,6 +63,25 @@ def create_tables(conn):
     create_table(cur, sqlite_create_spotify_albums_table)
     create_table(cur, sqlite_create_spotify_tracks_table)
     create_table(cur, sqlite_create_spotify_listens_table)
+
+def execute_static_query(db_filepath, sql):
+    with closing(sqlite3.connect(db_filepath)) as conn:
+        with conn:
+            with closing(conn.cursor()) as cur:
+                cur.execute(sql)
+                result = cur.fetchall()
+    return result
+
+def execute_query(db_filepath, sql, args):
+    """
+    TODO: implement checks and safeguards
+    """
+    with closing(sqlite3.connect(db_filepath)) as conn:
+        with conn:
+            with closing(conn.cursor()) as cur:
+                cur.execute(sql, args)
+                result = cur.fetchall()
+    return result
 
 def add_listen(cur, end_time, track_id):
     sql = """ INSERT INTO listens(end_time, track_id) VALUES (?,?)"""
