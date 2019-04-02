@@ -18,9 +18,9 @@
     - yes.
     
 ## Sprint 2
-### ??? - ???
-- [ ] Refactor program to use Pandas
+### 02.04.2019 - 
 - [ ] Implement proper CLI tool
+- [ ] Refactor program to use Pandas
 - [ ] Connect to spotify:
     - get the spotify id for tracks, albums and artists in the lfm history
     - Retrieve for all entries in lfm history:
