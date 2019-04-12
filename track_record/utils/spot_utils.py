@@ -3,6 +3,13 @@ import json
     
 
 def parse_date(datestring):
+    """Returns formated date
+    
+    datestring: datetime with shape: "dd MMM yyyy, hh:mm",
+    with shorthand for month eg DEC = december
+
+    return: datetime with shape: "YYYY-MM-DD-hh:mm"
+    """
     months = {
         "Dec": "12",
         "Nov": "11",
@@ -27,6 +34,10 @@ def parse_date(datestring):
 
 # spotipy interfacing
 def get_spotify_id(trackname="", artist="", album=""):
+    """NOT IMPLEMENTED 
+
+    Gets spotify id based on trackname, artist or album
+    """
     spotify = spotipy.Spotify()
     # results = spotify.search(q="track:" + trackname, type="track")
     results = spotify.search(q='artist:' + artist, type='artist')
@@ -35,6 +46,9 @@ def get_spotify_id(trackname="", artist="", album=""):
 
 # get_spotify_id("Sometimes")
 def load_json_history(filename):
+    """Loads filename containing json object
+    returns json list or [] if read error
+    """
     try:
         with open(filename, 'r', encoding='utf-8') as history_file:
             history = json.load(history_file)
@@ -44,6 +58,7 @@ def load_json_history(filename):
     return history
 
 def save_json_history(filename, data):
+    """Saves json data to path filename"""
     try:
         with open(filename, "w", encoding='utf-8') as aggregated_file:
             json.dump(data, aggregated_file, indent=4, ensure_ascii=False)

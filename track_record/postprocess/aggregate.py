@@ -13,6 +13,10 @@ aggregate_filename = "track_record/music_history/AggregatedHistory.json"
 
 
 def create_history(option="all"):
+    """DEPRECATED Creates a history dict based on source
+    
+    Source: spotify or lastfm
+    """
     if option == "spotify":
         history = load_json_history(spotify_filename)
     elif option == "lastfm":
@@ -27,6 +31,7 @@ def create_history(option="all"):
 
 
 def load_json_history(filename):
+    """Loads given path as json dict and returns result or []"""
     try:
         with open(filename, 'r', encoding='utf-8') as history_file:
             history = json.load(history_file)
@@ -37,6 +42,7 @@ def load_json_history(filename):
 
 
 def save_json_history(filename, data):
+    """Saves json data to path filename"""
     try:
         with open(filename, "w+", encoding='utf-8') as aggregated_file:
             json.dump(data, aggregated_file, indent=4, ensure_ascii=False)
@@ -45,6 +51,7 @@ def save_json_history(filename, data):
 
 
 def aggregate_history(play_history_list, source="spotify"):
+    """DEPRECATED Takes a list of plays and aggregates them into different statistics"""
     print("aggregating history from source: {}".format(source))
     keys = {
         "spotify": {
@@ -103,6 +110,7 @@ def aggregate_history(play_history_list, source="spotify"):
 
 
 def get_most_played_track(play_list):
+    """DEPRECATED Gets most played track from list of plays"""
     most_played_track = play_list[0]
     timespan = "."  # get timespan from endTimeList
     stat_entry = {
@@ -118,6 +126,7 @@ def get_most_played_track(play_list):
 
 
 def get_hourly_rate(play_list):
+    """Returns amount of plays for each hour of the day"""
     hourly_plays = [0 for x in range(24)]
     for track in play_list:
         for p in track['endTimeList']:
@@ -139,6 +148,7 @@ def get_hourly_rate(play_list):
 
 
 def make_stat_dict(list_dict_tuple):
+    """Compiles a dictionary of statistics given a (list, dict) tuple"""
     play_list = list_dict_tuple[0]
     # play_dict = list_dict_tuple[1]
     stat_dict = {}
@@ -148,6 +158,7 @@ def make_stat_dict(list_dict_tuple):
 
 
 def process_statistics(filename="AggregatedHistory.json"):
+    """Compiles statistics from aggregated history"""
     aggregated_history = load_json_history(filename)
     # aggregated_data = aggregate_history(hist_list)
     list_dict_tuple = (

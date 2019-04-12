@@ -52,12 +52,14 @@ def create_connection(db_file):
     
 
 def create_table(cur, create_table_sql):
+    """Creates a table given a db cursor and sql"""
     try:
         cur.execute(create_table_sql)
     except Error as e:
         print(e)
 
 def create_tables(conn):
+    """Creates tables for artists, albums, tracks and listens"""
     cur = conn.cursor()
     create_table(cur, sqlite_create_spotify_artists_table)
     create_table(cur, sqlite_create_spotify_albums_table)
@@ -65,6 +67,7 @@ def create_tables(conn):
     create_table(cur, sqlite_create_spotify_listens_table)
 
 def execute_static_query(db_filepath, sql):
+    """Executes a query without input data"""
     with closing(sqlite3.connect(db_filepath)) as conn:
         with conn:
             with closing(conn.cursor()) as cur:
@@ -73,7 +76,7 @@ def execute_static_query(db_filepath, sql):
     return result
 
 def execute_query(db_filepath, sql, args):
-    """
+    """Executes a query on the given database
     TODO: implement checks and safeguards
     """
     with closing(sqlite3.connect(db_filepath)) as conn:
@@ -84,24 +87,28 @@ def execute_query(db_filepath, sql, args):
     return result
 
 def add_listen(cur, end_time, track_id):
+    """Creates db entry for a listen"""
     sql = """ INSERT INTO listens(end_time, track_id) VALUES (?,?)"""
     listen = (end_time, track_id)
     cur.execute(sql, listen)
     return cur.lastrowid
 
 def add_track(cur, track_name, mbid="", spid="", album_id=None):
+    """Creates db entry for a track"""
     sql = """ INSERT INTO tracks(track_name, mbid, spid, album_id) VALUES(?,?,?,?) """
     track = (track_name, mbid, spid, album_id)
     cur.execute(sql, track)
     return cur.lastrowid
 
 def add_album(cur, album_name, mbid="", spid="", artist_id=None):
+    """Creates db entry for an album"""
     sql = """ INSERT INTO albums(album_name, mbid, spid, artist_id) VALUES (?,?,?,?) """
     album = (album_name, mbid, spid, artist_id)
     cur.execute(sql, album)
     return cur.lastrowid
     
 def add_artist(cur, artist_name, mbid="", spid="", misc=""):
+    """Creates db entry for an artist"""
     sql = """ INSERT INTO artists(artist_name, mbid, spid, misc) VALUES (?,?,?,?) """
     artist = (artist_name, mbid, spid, misc)
     cur.execute(sql, artist)
@@ -109,44 +116,47 @@ def add_artist(cur, artist_name, mbid="", spid="", misc=""):
 
 
 def get_artists(cur, artist_id=None):
+    """returns artist based on id, or all if none is given"""
     if not artist_id:
         sql = """ SELECT * from artists  ORDER BY artist_name"""
         cur.execute(sql)
     else:
-        sql = """ SELECT * from artists WHERE id=? ORDER BY artist_name"""
+        sql = """ SELECT * from artists WHERE id=?"""
         cur.execute(sql, artist_id)
     return cur.fetchall()
 
 def get_albums(cur, album_id=None):
+    """returns album based on id, or all if none is given"""
     if not album_id:
         sql = """ SELECT * from albums ORDER BY album_name"""
         cur.execute(sql)
     else:
-        sql = """ SELECT * from albums WHERE id=? ORDER BY album_name"""
+        sql = """ SELECT * from albums WHERE id=?"""
         cur.execute(sql, album_id)
     return cur.fetchall()
 
 def get_tracks(cur, track_id=None):
+    """returns track based on id, or all if none is given"""
     if not track_id:
         sql = """ SELECT * FROM tracks ORDER BY track_name"""
         cur.execute(sql)
     else:
-        sql = """ SELECT * from tracks WHERE id=? ORDER BY track_name"""
+        sql = """ SELECT * from tracks WHERE id=?"""
         cur.execute(sql, track_id)
     return cur.fetchall()
 
 def get_listens(cur, id=None):
-    
+    """returns listen based on id, or all if none is given"""
     if not id:
         sql = """ SELECT * from listens ORDER BY end_time"""
         cur.execute(sql)
     else:
-        sql = """ SELECT * from listens where id=? ORDER BY end_time"""
+        sql = """ SELECT * from listens where id=?"""
         cur.execute(sql, id)
     return cur.fetchall()
 
 def get_all_data_ids(cur):
-
+    """Returns all ids currently in the database"""
     artists_sql = """ SELECT id, artist_name FROM artists """
     albums_sql = """ SELECT id, album_name, artist_id FROM albums """
     tracks_sql = """ SELECT id, track_name, album_id FROM tracks """
@@ -198,6 +208,7 @@ def get_all_data_ids(cur):
     
 
 def fill_tables(json_data, db_filename):
+    """Fills db with data, checking if it already exists in db"""
     conn = sqlite3.connect(db_filename)
     cur = conn.cursor()
     tracks = {}

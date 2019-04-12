@@ -46,6 +46,7 @@ def execute_queries(q_args=[], history_db_filepath="history.db"):
     return results
 
 def execute_predef_query(query_id, history_db_filepath="history.db"):
+    """Executes a query from predefined_queries"""
     try:
         sql = predefined_queries[query_id]
     except KeyError as e:
@@ -59,6 +60,7 @@ def execute_predef_query(query_id, history_db_filepath="history.db"):
         
 
 def get_statistics(history_db_filepath="history.db"):
+    """Executes a series of queries and returns the result as a list"""
     queries = [predefined_queries[k] for k in predefined_queries.keys()]
     results = execute_queries(q_args=queries, history_db_filepath=history_db_filepath)
     return results

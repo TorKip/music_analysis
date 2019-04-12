@@ -8,7 +8,10 @@ CLEANED_FILENAME = "track_record/music_history/cleanlfm.json"
 # DB_FILENAME = "trackrecord/music_history/history.db"
 DB_FILENAME = "history.db"
 
+
 def clean_lfm_data(lfm_history):
+    """Creates a clean version of lastFM data"""
+
     clean_history = []
     
     for entry in lfm_history:
@@ -17,6 +20,7 @@ def clean_lfm_data(lfm_history):
         album = entry["album"]
 
         clean_entry["date"] = parse_date(entry["date"]["#text"])
+        clean_entry["uts_date"] = entry["date"]["uts"]
         clean_entry["artist"] = {
             "name":artist["#text"],
             "mbid":artist["mbid"]
@@ -36,13 +40,25 @@ def clean_lfm_data(lfm_history):
         clean_history.append(clean_entry)
     return clean_history
         
+
 def save_clean_data(option="lastFm"):
+    """Saves a cleaned version of the music history. 
+
+    Currently implemented for LastFM data
+    """
+
     if option == "lastfm":
         data = load_json_history(LASTFM_FILENAME)
         cleaned_data = clean_lfm_data(data)
         save_json_history(CLEANED_FILENAME, cleaned_data)
 
-def fill_database(history_filename=CLEANED_FILENAME, db_filename = DB_FILENAME):
+
+def fill_database(history_filename=CLEANED_FILENAME, db_filename=DB_FILENAME):
+    """Fills given database with given cleaned data
+    
+    history_filename: path to json file with clean data
+    db_filename: path to the database that shall be filled
+    """
     json_history = load_json_history(history_filename)
     db.create_connection(db_filename)
     db.fill_tables(json_history, db_filename)
