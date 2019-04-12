@@ -1,6 +1,6 @@
 from track_record.tests import db_tests, stat_tests
 
-def run():
+def run_all():
     db_tests.create_test_database()
     
     db_tests.test_database_fill()

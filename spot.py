@@ -1,78 +1,67 @@
-import sys
-from track_record.preprocess import preprocess
-from track_record.postprocess import aggregate, visualize
-from track_record.utils import db_tools, spot_utils
-from track_record.tests import test_main
+import click
+import track_record.tests.test_main as test_main
+from track_record.postprocess import aggregate as aggregate_history, visualize as visualize_history
+from track_record.preprocess import preprocess as preprocess_history
 
 
-help_text = {
-    "general": "here will be help soon",
-    "commands":{
-        "aggregate": "to aggregate add attributes:  --aggregate|-A  and -s|-lfm ",
-        "preprocess": "to preprocess add attributes: --preprocess|-pp and -lfm "
-        }
-}
+# @click.command()
+# @click.option("--variable", default="default_world",
+#                 help="variable, is string")
+# @click.option("--repeat", default=1)
+# def cli(variable):
+#     """Example script"""
+#     click.echo("Hello all! This good: cli, string is {}".format(variable))
+
+@click.group()
+@click.version_option()
+def cli():
+    pass
+
+@click.command(help="run tests")
+@click.option('-A','--all', help="What tests to test", is_flag=True, default=False)
+# @click.argument("tests", nargs=1)
+def test(all):
+    if all:
+        test_main.run_all()
+    click.echo(all)
+
+@click.command('postprocess', help="Process music history")
+@click.option("-s", "--spotify", "source", help="Use spotify history as source", flag_value="spotify")
+@click.option("-lfm", "--lastfm", "source", help="Use lastfm history as source", flag_value="lastfm")
+def postprocess(source):
+    if source:
+        aggregate_history.create_history(source)
+    else:
+        aggregate_history.create_history()
+    
+@click.group('preprocess', help="Preprocess and clean imported data.")
+@click.option("-fd", "--filldatabase", is_flag=True, default=False)
+def preprocess(filldatabase):
+    if filldatabase:
+        preprocess_history.fill_database()
+
+# @click.option("-s", "--spotify", "source", help="Clean imported spotify data", flag_value="spotify")
+# @click.option("-lfm", "--lastfm", "source", help="Clean imported lastfm data", flag_value="lastfm", default="lastfm")
+
+@click.command("clean_data", help="Clean imported data from chosen source")
+@click.option("--source", type=click.Choice(["spotify", "lastfm"]), help="Default source = LastFM")
+def clean_data(source):
+    """Clean imported data from chosen source. Default: lastfm"""
+    if source:
+        preprocess_history.save_clean_data(source)
 
 
-def welcome_info():
-    version = 0.1
-    welcome = "Velkommen til <ubestemt navn>"
-    help = help_text["general"]
-    print("{} \n Versjon nummer: {} \n {}".format(welcome, version, help))
-
-
-if __name__ == "__main__":
-    parameters = sys.argv[1:] if len(sys.argv) > 1 else None
-    print("Running \"spot if I\" why with parameters:{}".format(parameters))
-    if not parameters:
-        print(welcome_info())
-    while parameters:
-        parameter = parameters.pop(0)
-        if parameter == "--aggregate" or parameter == "-A":
-            parameter = parameters.pop(0) if len(parameters) > 0 else None
-            if parameter == "--spotify" or parameter == "-s":
-                aggregate.create_history('spotify')
-            elif parameter == "--lastfm" or parameter == "-lfm":
-                aggregate.create_history('lastfm')
-            elif not parameter:
-                aggregate.create_history()
-            elif parameter == "--help" or parameter == "-h":
-                print(help_text["commands"]["aggregate"])
-            else:
-                print("for help type --help or -h")
-
-        elif parameter == '--mute' or parameter == "-m":
-            pass
-        elif parameter == "--help" or parameter == "-h":
-                print(help_text["general"])
-
-        elif parameter == "--preprocess" or parameter == "-pp":
-            
-            parameter = parameters.pop(0) if len(parameters) > 0 else None
-            if parameter == "--spotify" or parameter == "-s":
-                pass
-                preprocess.save_clean_data('spotify')
-            elif parameter == "--lastfm" or parameter == "-lfm":
-                print("Creating cleaned copy of LFM data...")
-                preprocess.save_clean_data('lastfm')
-                print("Done!")
-            elif parameter == "--help" or parameter == "-h" or not parameter:
-                print(help_text["commands"]["preprocess"])
-            else:
-                print("for help type --help or -h")
+@click.command("visualize", help="Creates visualisations of processed data.")
+@click.option("-SO", "--static_out", is_flag=True, default=False)
+def visualize(static_out):
+    if static_out:
+        visualize_history.static_out()
         
-        elif parameter == "--filldatabase" or preprocess == "-fd":
-            preprocess.fill_database()
 
-        elif parameter == "--process" or parameter == "-P":
-            aggregate.process_statistics()
 
-        elif parameter == "--output" or parameter == "-O":
-            visualize.static_out()
+cli.add_command(test)
+cli.add_command(postprocess)
+cli.add_command(preprocess)
+cli.add_command(visualize)
 
-        elif parameter == "--test" or parameter == "-T":
-            test_main.run()
-            
-        elif parameter == "-stest":
-            print(spot_utils.get_spotify_id(artist="ABBA"))
-    # process_statistics('StreamingHistory.json')
+preprocess.add_command(clean_data)
