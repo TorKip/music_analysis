@@ -1,6 +1,7 @@
 [
     {
         "date": "2017-12-30 14:13",
+        "uts_date": "1514643180",
         "artist": {
             "name": "Moddi",
             "mbid": "8afb628a-ab5f-405a-8759-fc03e462fe40"
@@ -20,6 +21,7 @@
     },
     {
         "date": "2017-12-28 19:24",
+        "uts_date": "1514489040",
         "artist": {
             "name": "Hans Zimmer",
             "mbid": "e6de1f3b-6484-491c-88dd-6d619f142abc"
@@ -39,6 +41,7 @@
     },
     {
         "date": "2017-12-28 19:21",
+        "uts_date": "1514488860",
         "artist": {
             "name": "Howard Shore",
             "mbid": "9b58672a-e68e-4972-956e-a8985a165a1f"
@@ -58,6 +61,7 @@
     },
     {
         "date": "2017-12-28 19:14",
+        "uts_date": "1514488440",
         "artist": {
             "name": "Howard Shore",
             "mbid": "9b58672a-e68e-4972-956e-a8985a165a1f"
@@ -77,6 +81,7 @@
     },
     {
         "date": "2017-12-28 19:12",
+        "uts_date": "1514488320",
         "artist": {
             "name": "Ramin Djawadi",
             "mbid": "f089f636-6b85-4e0e-a192-0d30ed2b44d1"
@@ -96,6 +101,7 @@
     },
     {
         "date": "2017-12-28 19:10",
+        "uts_date": "1514488200",
         "artist": {
             "name": "Ramin Djawadi",
             "mbid": "f089f636-6b85-4e0e-a192-0d30ed2b44d1"
@@ -115,6 +121,7 @@
     },
     {
         "date": "2017-12-28 19:00",
+        "uts_date": "1514487600",
         "artist": {
             "name": "Ramin Djawadi",
             "mbid": ""
@@ -134,6 +141,7 @@
     },
     {
         "date": "2017-12-28 18:50",
+        "uts_date": "1514487000",
         "artist": {
             "name": "Floppotron covers",
             "mbid": ""

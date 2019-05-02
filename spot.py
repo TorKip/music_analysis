@@ -40,11 +40,11 @@ def postprocess(source):
         aggregate_history.create_history(source)
     else:
         aggregate_history.create_history()
-    
+
 
 @click.group('preprocess', help="Preprocess and clean imported data.")
 @click.option("-fd", "--filldatabase", is_flag=True, default=False,
-                help="Fills database with data at default path")
+              help="Fills database with data at default path")
 def preprocess(filldatabase):
     """Group of commands to preprocess data with different options"""
     if filldatabase:
@@ -52,12 +52,16 @@ def preprocess(filldatabase):
 
 
 @click.command("clean_data", help="Clean imported data from chosen source")
-@click.option("--source", type=click.Choice(["spotify", "lastfm"]),
-              help="Default source = LastFM")
-def clean_data(source):
+@click.option("--source_format", type=click.Choice(["spotify", "lastfm"]),
+              help="Default source format = LastFM", default="lastfm")
+@click.argument("source",
+                default=".\\track_record\\music_data\\LastFmTest.json")
+def clean_data(source, source_format):
     """Clean imported data from chosen source. Default: lastfm"""
+    click.echo("Cleaning data on path: {} \nUsing format: {}"
+               .format(source, source_format))
     if source:
-        preprocess_history.save_clean_data(source)
+        preprocess_history.save_clean_data(source, source_format)
 
 
 @click.command("visualize", help="Creates visualisations of processed data.")

@@ -37,12 +37,14 @@ def cool_stat_print(stat_dict):
         else:
             plot_stat(stat_dict[key])
 
+
 def static_out():
     """Basic function to print some simple statistics. 
     
     Prints total listens, tracks, albums and artists in db
     """
-    print("total listens: " + str(stat_gen.count_total_listens()))
-    print("total tracks: " + str(stat_gen.count_total_tracks()))
-    print("total albums: " + str(stat_gen.count_total_albums()))
-    print("total artists: " + str(stat_gen.count_total_artists()))
+#     print("total listens: " + str(stat_gen.()))
+#     print("total tracks: " + str(stat_gen.count_total_tracks()))
+#     print("total albums: " + str(stat_gen.count_total_albums()))
+#     print("total artists: " + str(stat_gen.count_total_artists()))
+    print(stat_gen.get_statistics())

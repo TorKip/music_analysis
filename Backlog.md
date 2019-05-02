@@ -21,7 +21,7 @@
 ### 02.04.2019 - 
 - [x] Implement proper CLI tool
     - Now using Click python cli creation kit.
-- [ ] Refactor program to use Pandas
+- [x] Refactor program to use Pandas
 - [ ] Connect to spotify:
     - get the spotify id for tracks, albums and artists in the lfm history
     - Retrieve for all entries in lfm history:
