@@ -44,7 +44,7 @@ def clean_lfm_data(lfm_history):
         print("Could not clean data due to:")
         print(te, "\nRaw data might not be on lastfm format.")
     return clean_history
-        
+
 
 def save_clean_data(source_file=LASTFM_FILENAME, source_format="lastfm",
                     destination_file=CLEANED_FILENAME):

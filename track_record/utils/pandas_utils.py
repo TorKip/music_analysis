@@ -63,20 +63,22 @@ def get_num_artists(db_file=HISTORY_DATABASE):
 #     return(top_artists)
 
 def get_most_listened_artists(number_of_artists=1, db_file=HISTORY_DATABASE):
-    """Returns the most listened to artist(s) as a tuple with description 
+    """Returns the most listened to artist(s) as a tuple with description
     and sorted pandas.Dataframe
 
     result shape:
     (description, pandas.Dataframe)
 
-    Description: The <number_of_artists> most listened to artists in the dataset
+    Description: The <number_of_artists> most listened to artists in the
+    dataset
 
     Dataframe shape:
     id_x    artist_id   artist_name     count
     int     int         string          int
     ...     ...         ...             ...
     """
-    description = "The {} most listened to artists in the dataset".format(number_of_artists)
+    description = "The {} most listened to artists in the dataset"\
+        .format(number_of_artists)
     engine = dbt.get_connectable(db_file)
     listens = pd.read_sql_table("listens", con=engine)
     artists = pd.read_sql_table("artists", con=engine)
@@ -87,13 +89,13 @@ def get_most_listened_artists(number_of_artists=1, db_file=HISTORY_DATABASE):
     def add_count(x):
         x["count"] = count[x["artist_id"]]
         return x
-    
+
     data = data.apply(add_count, axis=1).nlargest(number_of_artists, "count")
     return (description, data)
 
 
 def get_most_listened_albums(number_of_albums=1, db_file=HISTORY_DATABASE):
-    """Returns the most listened to album(s) as a tuple with description 
+    """Returns the most listened to album(s) as a tuple with description
     and sorted pandas.Dataframe
 
     result shape:
@@ -106,7 +108,8 @@ def get_most_listened_albums(number_of_albums=1, db_file=HISTORY_DATABASE):
     int     int         string          int
     ...     ...         ...             ...
     """
-    description = "The {} most listened to albums in the dataset".format(number_of_albums)
+    description = "The {} most listened to albums in the dataset"\
+        .format(number_of_albums)
     engine = dbt.get_connectable(db_file)
     listens = pd.read_sql_table("listens", con=engine)
     albums = pd.read_sql_table("albums", con=engine)
@@ -123,7 +126,7 @@ def get_most_listened_albums(number_of_albums=1, db_file=HISTORY_DATABASE):
 
 
 def get_most_listened_tracks(number_of_tracks=1, db_file=HISTORY_DATABASE):
-    """Returns the most listened to track(s) as a tuple with description 
+    """Returns the most listened to track(s) as a tuple with description
     and sorted pandas.Dataframe
 
     result shape:
@@ -136,7 +139,8 @@ def get_most_listened_tracks(number_of_tracks=1, db_file=HISTORY_DATABASE):
     int     int         string          int
     ...     ...         ...             ...
     """
-    description = "The {} most listened to tracks in the dataset".format(number_of_tracks)
+    description = "The {} most listened to tracks in the dataset"\
+        .format(number_of_tracks)
     engine = dbt.get_connectable(db_file)
     listens = pd.read_sql_table("listens", con=engine)
     tracks = pd.read_sql_table("tracks", con=engine)
@@ -149,8 +153,8 @@ def get_most_listened_tracks(number_of_tracks=1, db_file=HISTORY_DATABASE):
         return x
 
     data = data.apply(add_count, axis=1).nlargest(number_of_tracks, "count")
-    return data
-    
+    return (description, data)
+
 # if __name__ == "__main__":
 #     # load_total_history()
 #     print(get_num_listens())
