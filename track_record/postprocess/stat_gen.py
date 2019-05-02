@@ -70,11 +70,11 @@ def get_statistics(history_db_filepath="history.db"):
     # results = execute_queries(q_args=queries,
     #               history_db_filepath=history_db_filepath)
     results = []
-    results.append(pandas_utils.get_num_listens)
-    results.append(pandas_utils.get_num_tracks)
-    results.append(pandas_utils.get_num_albums)
-    results.append(pandas_utils.get_num_artists)
-    results.append(pandas_utils.get_most_listened_tracks)
-    results.append(pandas_utils.get_most_listened_albums)
-    results.append(pandas_utils.get_most_listened_artists)
+    results.append(pandas_utils.get_num_listens())
+    results.append(pandas_utils.get_num_tracks())
+    results.append(pandas_utils.get_num_albums())
+    results.append(pandas_utils.get_num_artists())
+    results.append(pandas_utils.get_most_listened_tracks())
+    results.append(pandas_utils.get_most_listened_albums())
+    results.append(pandas_utils.get_most_listened_artists())
     return results
