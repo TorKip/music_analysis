@@ -9,7 +9,6 @@ numpy = "*"
 spotipy = "*"
 "flake8" = "*"
 pandas = "*"
-"beautifulsoup4" = "*"
 click = "*"
 
 [dev-packages]
