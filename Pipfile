@@ -10,6 +10,7 @@ spotipy = "*"
 "flake8" = "*"
 pandas = "*"
 click = "*"
+"urllib3" = "*"
 
 [dev-packages]
 pylint = "*"

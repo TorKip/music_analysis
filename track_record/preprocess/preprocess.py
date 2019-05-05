@@ -3,7 +3,7 @@ from track_record.utils.spot_utils import save_json_history
 from track_record.utils.spot_utils import parse_date
 import track_record.utils.db_tools as db
 
-SPOTIFY_FILENAME = "tracke_record/music_history/SpotifyTest.json"
+SPOTIFY_FILENAME = "track_record/music_history/SpotifyTest.json"
 # LASTFM_FILENAME = "track_record/music_history/LastFmTest.json"
 LASTFM_FILENAME = "track_record/music_history/2017.json"
 CLEANED_FILENAME = "track_record/music_history/cleanlfm.json"
@@ -21,10 +21,10 @@ def clean_lfm_data(lfm_history):
             artist = entry["artist"]
             album = entry["album"]
 
-            clean_entry["date"] = parse_date(entry["date"]["text"])
+            clean_entry["date"] = parse_date(entry["date"]["#text"])
             clean_entry["uts_date"] = entry["date"]["uts"]
             clean_entry["artist"] = {
-                "name": artist["text"],
+                "name": artist["#text"],
                 "mbid": artist["mbid"]
             }
             clean_entry["track"] = {

@@ -47,4 +47,6 @@ def static_out():
 #     print("total tracks: " + str(stat_gen.count_total_tracks()))
 #     print("total albums: " + str(stat_gen.count_total_albums()))
 #     print("total artists: " + str(stat_gen.count_total_artists()))
-    print(stat_gen.get_statistics())
+    for s in stat_gen.get_statistics():
+        for e in s:
+            print(e)

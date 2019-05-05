@@ -1,28 +1,24 @@
-import numpy as np
+# import numpy as np
 import pandas as pd
 from track_record.utils import db_tools as dbt
-# import time
+import time
 
 
 HISTORY_DATABASE = "history.db"
 
 
-def load_total_history(history_database=HISTORY_DATABASE):
-    engine = dbt.get_connectable(history_database)
+# def load_total_history(history_database=HISTORY_DATABASE):
+#     engine = dbt.get_connectable(history_database)
 
-    listens = pd.read_sql_table("listens", con=engine)
-    tracks = pd.read_sql("tracks", con=engine)
-    # albums = pd.read_sql_table("albums", con=engine)
-    # artists = pd.read_sql_table("artists", con=engine)
-    print(listens.head(7))
-    print(tracks.head(7))
-    lis_tra = pd.merge(listens, tracks, left_on='track_id', right_on='id')
-    # lis_tra = listens.join(tracks, on="track_id", how='right', lsuffix="_lis"
-    # , rsuffix="_tra")
-    # lis_tra_alb_art = listens
-    # tra_lis = tracks.join(listens, on="id", lsuffix="_tra", rsuffix="_lis")
-    print(lis_tra.head(7))
-    # print(list_tra_alb_art.head(7))
+#     listens = pd.read_sql_table("listens", con=engine)
+#     tracks = pd.read_sql("tracks", con=engine)
+#     # albums = pd.read_sql_table("albums", con=engine)
+#     # artists = pd.read_sql_table("artists", con=engine)
+#     print(listens.head(7))
+#     print(tracks.head(7))
+#     lis_tra = pd.merge(listens, tracks, left_on='track_id', right_on='id')
+
+#     print(lis_tra.head(7))
 
 
 def get_num_listens(db_file=HISTORY_DATABASE):
@@ -62,7 +58,8 @@ def get_num_artists(db_file=HISTORY_DATABASE):
 #     print(data)
 #     return(top_artists)
 
-def get_most_listened_artists(number_of_artists=1, db_file=HISTORY_DATABASE):
+def get_most_listened_artists(number_of_artists=1, db_file=HISTORY_DATABASE,
+                              listens=None, artists=None):
     """Returns the most listened to artist(s) as a tuple with description
     and sorted pandas.Dataframe
 
@@ -79,22 +76,25 @@ def get_most_listened_artists(number_of_artists=1, db_file=HISTORY_DATABASE):
     """
     description = "The {} most listened to artists in the dataset"\
         .format(number_of_artists)
-    engine = dbt.get_connectable(db_file)
-    listens = pd.read_sql_table("listens", con=engine)
-    artists = pd.read_sql_table("artists", con=engine)
-    data = pd.merge(listens, artists, left_on="artist_id", right_on="id")[[
-        "id_x", "artist_id", "artist_name"]]
-    count = data.groupby("artist_id").id_x.nunique()
+    if listens is None or artists is None:    
+        engine = dbt.get_connectable(db_file)
+    if listens is None:
+        listens = pd.read_sql_table("listens", con=engine)
+    if artists is None:
+        artists = pd.read_sql_table("artists", con=engine)
 
-    def add_count(x):
-        x["count"] = count[x["artist_id"]]
-        return x
+    count = listens[["id", "artist_id"]].groupby("artist_id").count()\
+        .rename(index=int, columns={"id": "count"})
 
-    data = data.apply(add_count, axis=1).nlargest(number_of_artists, "count")
+    data = pd.merge(artists[["id", "artist_name"]], count[["count"]],
+                    left_on="id", right_on="artist_id")\
+        .nlargest(number_of_artists, "count")
+ 
     return (description, data)
 
 
-def get_most_listened_albums(number_of_albums=1, db_file=HISTORY_DATABASE):
+def get_most_listened_albums(number_of_albums=1, db_file=HISTORY_DATABASE,
+                             listens=None, albums=None):
     """Returns the most listened to album(s) as a tuple with description
     and sorted pandas.Dataframe
 
@@ -110,22 +110,25 @@ def get_most_listened_albums(number_of_albums=1, db_file=HISTORY_DATABASE):
     """
     description = "The {} most listened to albums in the dataset"\
         .format(number_of_albums)
-    engine = dbt.get_connectable(db_file)
-    listens = pd.read_sql_table("listens", con=engine)
-    albums = pd.read_sql_table("albums", con=engine)
-    data = pd.merge(listens, albums, left_on="album_id", right_on="id")[[
-        "id_x", "album_id", "album_name"]]
-    count = data.groupby("album_id").id_x.nunique()
+    if listens is None or albums is None:
+        engine = dbt.get_connectable(db_file)
+    if listens is None:
+        listens = pd.read_sql_table("listens", con=engine)
+    if albums is None:
+        albums = pd.read_sql_table("albums", con=engine)
 
-    def add_count(x):
-        x["count"] = count[x["album_id"]]
-        return x
+    count = listens[["id", "album_id"]].groupby("album_id").count()\
+        .rename(index=int, columns={"id": "count"})
 
-    data = data.apply(add_count, axis=1).nlargest(number_of_albums, "count")
+    data = pd.merge(albums[["id", "album_name"]], count[["count"]],
+                    left_on="id", right_on="album_id")\
+        .nlargest(number_of_albums, "count")
+
     return (description, data)
 
 
-def get_most_listened_tracks(number_of_tracks=1, db_file=HISTORY_DATABASE):
+def get_most_listened_tracks(number_of_tracks=1, db_file=HISTORY_DATABASE,
+                             listens=None, tracks=None):
     """Returns the most listened to track(s) as a tuple with description
     and sorted pandas.Dataframe
 
@@ -135,32 +138,61 @@ def get_most_listened_tracks(number_of_tracks=1, db_file=HISTORY_DATABASE):
     Description: The <number_of_tracks> most listened to tracks in the dataset
 
     Dataframe shape:
-    id_x    track_id    track_name      count
+    index   id          track_name      count
     int     int         string          int
     ...     ...         ...             ...
     """
     description = "The {} most listened to tracks in the dataset"\
         .format(number_of_tracks)
-    engine = dbt.get_connectable(db_file)
-    listens = pd.read_sql_table("listens", con=engine)
-    tracks = pd.read_sql_table("tracks", con=engine)
-    data = pd.merge(listens, tracks, left_on="track_id", right_on="id")[[
-        "id_x", "track_id", "track_name"]]
-    count = data.groupby("track_id").id_x.nunique()
+    if listens is None or tracks is None:
+        engine = dbt.get_connectable(db_file)
+    if listens is None:
+        listens = pd.read_sql_table("listens", con=engine)
+    if tracks is None:
+        tracks = pd.read_sql_table("tracks", con=engine)
 
-    def add_count(x):
-        x["count"] = count[x["track_id"]]
-        return x
+    count = listens[["id", "track_id"]].groupby("track_id").count()\
+        .rename(index=int, columns={"id": "count"})
 
-    data = data.apply(add_count, axis=1).nlargest(number_of_tracks, "count")
+    data = pd.merge(tracks[["id", "track_name"]], count[["count"]],
+                    left_on="id", right_on="track_id")\
+        .nlargest(number_of_tracks, "count")
+
     return (description, data)
 
-# if __name__ == "__main__":
-#     # load_total_history()
-#     print(get_num_listens())
-#     print(get_num_tracks())
-#     print(get_num_albums())
-#     print(get_num_artists())
-#     print(get_most_listened_artists(number_of_artists=3))
-#     print(get_most_listened_albums(number_of_albums=3))
-#     print(get_most_listened_tracks(number_of_tracks=3))
+
+def read_db():
+    engine = dbt.get_connectable(HISTORY_DATABASE)
+    listens = pd.read_sql_table("listens", con=engine)
+    tracks = pd.read_sql_table("tracks", con=engine)
+    albums = pd.read_sql_table("albums", con=engine)
+    artists = pd.read_sql_table("artists", con=engine)
+    return listens, tracks, albums, artists
+    
+
+if __name__ == "__main__":
+    results = []
+    start = time.time()
+    results.append(get_num_listens())
+    results.append(get_num_tracks())
+    results.append(get_num_albums())
+    results.append(get_num_artists())
+    
+    listens = None
+    tracks = None
+    albums = None
+    artists = None
+    
+    listens, tracks, albums, artists = read_db()
+
+    results.append(get_most_listened_artists(number_of_artists=3,\
+                   listens=listens, artists=artists))
+    results.append(get_most_listened_albums(number_of_albums=3,\
+                   listens=listens, albums=albums))
+    results.append(get_most_listened_tracks(number_of_tracks=3,\
+                   listens=listens, tracks=tracks))
+    stop = time.time()
+    for s in results:
+        for e in s:
+            print(e)
+    print(stop-start)

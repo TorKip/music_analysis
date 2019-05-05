@@ -1,6 +1,7 @@
 import click
 import track_record.tests.test_main as test_main
-from track_record.postprocess import aggregate as aggregate_history, visualize as visualize_history
+from track_record.postprocess import aggregate as aggregate_history,\
+        visualize as visualize_history
 from track_record.preprocess import preprocess as preprocess_history
 
 
@@ -55,13 +56,32 @@ def preprocess(filldatabase):
 @click.option("--source_format", type=click.Choice(["spotify", "lastfm"]),
               help="Default source format = LastFM", default="lastfm")
 @click.argument("source",
-                default=".\\track_record\\music_data\\LastFmTest.json")
+                default="track_record/music_history/LastFmTest.json")
 def clean_data(source, source_format):
     """Clean imported data from chosen source. Default: lastfm"""
     click.echo("Cleaning data on path: {} \nUsing format: {}"
                .format(source, source_format))
     if source:
         preprocess_history.save_clean_data(source, source_format)
+
+
+# @click.option("-fd", "--filldatabase", is_flag=True, default=False,
+#               help="Fills database with data at default path")
+@click.command("fill_database")
+@click.argument("source",
+                default="track_record/music_history/cleanlfm.json")
+@click.argument("path", 
+                default="history.db")
+def fill_database(source, path):
+    """Fills database at path with cleaned data at source. 
+    
+    Default path: history.db
+    
+    Default source: track_record/music_history/cleanlfm.json
+    """
+    click.echo("Filling database {} with data from {}"
+               .format(path, source))
+    preprocess_history.fill_database(source, path)
 
 
 @click.command("visualize", help="Creates visualisations of processed data.")
@@ -78,3 +98,4 @@ cli.add_command(preprocess)
 cli.add_command(visualize)
 
 preprocess.add_command(clean_data)
+preprocess.add_command(fill_database)
