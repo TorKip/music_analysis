@@ -30,7 +30,7 @@ def clean_lfm_data(lfm_history):
             clean_entry["track"] = {
                 "name": entry["name"],
                 "mbid": entry["mbid"],
-                "end_time": clean_entry["date"],
+                # "end_time": clean_entry["date"],
                 "artist_id": artist["mbid"],
                 "album_id": album["mbid"]
             }

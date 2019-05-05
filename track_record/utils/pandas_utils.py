@@ -1,6 +1,6 @@
 # import numpy as np
 import pandas as pd
-from track_record.utils import db_tools as dbt
+from track_record.utils import db_tools as dbt, spot_utils as spu
 import time
 
 
@@ -21,35 +21,55 @@ HISTORY_DATABASE = "history.db"
 #     print(lis_tra.head(7))
 
 
-def get_num_listens(db_file=HISTORY_DATABASE):
-    """Returns number of listenes in the database"""
-    engine = dbt.get_connectable(db_file)
+def get_num_listens(listens=None, db_file=HISTORY_DATABASE):
+    """Returns number of listenes in the dataframe or database.
+
+    If listens is set db_file will be ignored.
+    """
     description = "Total number of listens in dataset"
-    num_listens = pd.read_sql_table("listens", con=engine).id.nunique()
+    if listens is None:
+        engine = dbt.get_connectable(db_file)
+        listens = pd.read_sql_table("listens", con=engine)
+    num_listens = listens.id.nunique()
     return (description, num_listens)
 
 
-def get_num_tracks(db_file=HISTORY_DATABASE):
-    """Returns number of tracks in the database"""
-    engine = dbt.get_connectable(db_file)
+def get_num_tracks(tracks=None, db_file=HISTORY_DATABASE):
+    """Returns number of tracks in the dataframe og database.
+
+    If tracks is set db_file will be ignored.
+    """
     description = "Number of unique tracks in dataset"
-    num_tracks = pd.read_sql_table("tracks", con=engine).id.nunique()
+    if tracks is None:
+        engine = dbt.get_connectable(db_file)
+        tracks = pd.read_sql_table("tracks", con=engine)
+    num_tracks = tracks.id.nunique()
     return (description, num_tracks)
 
 
-def get_num_albums(db_file=HISTORY_DATABASE):
-    """Returns number of albums in the database"""
-    engine = dbt.get_connectable(db_file)
+def get_num_albums(albums=None, db_file=HISTORY_DATABASE):
+    """Returns number of albums in the dataframe or database.
+
+    If albums is set db_file will be ignored.
+    """
     description = "Number of unique albums in dataset"
-    num_albums = pd.read_sql_table("albums", con=engine).id.nunique()
+    if albums is None:
+        engine = dbt.get_connectable(db_file)
+        albums = pd.read_sql_table("albums", con=engine)
+    num_albums = albums.id.nunique()
     return (description, num_albums)
 
 
-def get_num_artists(db_file=HISTORY_DATABASE):
-    """Returns number of artists in the database"""
-    engine = dbt.get_connectable(db_file)
+def get_num_artists(artists=None, db_file=HISTORY_DATABASE):
+    """Returns number of artists in the dataframe or database.
+
+    If artists is set db_file will be ignored.
+    """
     description = "Number of unique artists in dataset"
-    num_artists = pd.read_sql_table("artists", con=engine).id.nunique()
+    if artists is None:
+        engine = dbt.get_connectable(db_file)
+        artists = pd.read_sql_table("artists", con=engine)
+    num_artists = artists.id.nunique()
     return (description, num_artists)
 
 
@@ -76,7 +96,7 @@ def get_most_listened_artists(number_of_artists=1, db_file=HISTORY_DATABASE,
     """
     description = "The {} most listened to artists in the dataset"\
         .format(number_of_artists)
-    if listens is None or artists is None:    
+    if listens is None or artists is None:
         engine = dbt.get_connectable(db_file)
     if listens is None:
         listens = pd.read_sql_table("listens", con=engine)
@@ -89,7 +109,7 @@ def get_most_listened_artists(number_of_artists=1, db_file=HISTORY_DATABASE,
     data = pd.merge(artists[["id", "artist_name"]], count[["count"]],
                     left_on="id", right_on="artist_id")\
         .nlargest(number_of_artists, "count")
- 
+
     return (description, data)
 
 
@@ -161,6 +181,48 @@ def get_most_listened_tracks(number_of_tracks=1, db_file=HISTORY_DATABASE,
     return (description, data)
 
 
+def get_timebound_listens(original_listens, start_time=0, end_time=None):
+    # print("start time type: {}\n end time type: {}".format(type(start_time),
+    #  type(end_time)))
+    """Returns a subset of the original listens that have
+    uts timestamps between start_time and end_time
+    """
+    listens = original_listens.copy()
+    if end_time is None:
+        result = listens[(listens["uts_end_time"] > start_time)]
+    else:
+        result = listens[(listens["uts_end_time"] > start_time)
+                         & (listens["uts_end_time"] < end_time)]
+    return result
+
+
+def get_time_bound_tracks(original_tracks, start_time=0, end_time=None,
+                          original_listens=None, listens=None):
+    """Returns a subset of the original tracks based on uts
+    timestamps or a list of listens.
+
+    """
+    pass
+
+
+def get_time_bound_albums(original_tracks, start_time=0, end_time=None,
+                          original_listens=None, listens=None):
+    """Returns a subset of the original tracks based on uts
+    timestamps or a list of listens.
+
+    """
+    pass
+
+
+def get_time_bound_artists(original_tracks, start_time=0, end_time=None,
+                           original_listens=None, listens=None):
+    """Returns a subset of the original tracks based on uts
+    timestamps or a list of listens.
+
+    """
+    pass
+
+
 def read_db():
     engine = dbt.get_connectable(HISTORY_DATABASE)
     listens = pd.read_sql_table("listens", con=engine)
@@ -168,7 +230,7 @@ def read_db():
     albums = pd.read_sql_table("albums", con=engine)
     artists = pd.read_sql_table("artists", con=engine)
     return listens, tracks, albums, artists
-    
+
 
 if __name__ == "__main__":
     results = []
@@ -177,20 +239,35 @@ if __name__ == "__main__":
     results.append(get_num_tracks())
     results.append(get_num_albums())
     results.append(get_num_artists())
-    
+
     listens = None
     tracks = None
     albums = None
     artists = None
-    
+
     listens, tracks, albums, artists = read_db()
 
-    results.append(get_most_listened_artists(number_of_artists=3,\
+    start_date = spu.date_string_to_uts("2017-05-17 22:00")
+    end_date = spu.date_string_to_uts("2017-05-23 15:00")
+
+    listens = get_timebound_listens(listens, start_date, end_date)
+    results.append(get_most_listened_artists(number_of_artists=3,
                    listens=listens, artists=artists))
-    results.append(get_most_listened_albums(number_of_albums=3,\
+    results.append(get_most_listened_albums(number_of_albums=3,
                    listens=listens, albums=albums))
-    results.append(get_most_listened_tracks(number_of_tracks=3,\
+    results.append(get_most_listened_tracks(number_of_tracks=3,
                    listens=listens, tracks=tracks))
+
+    # results.append((listens.head(5), type(listens),
+    #  listens["uts_end_time"].dtype))
+    # results.append(("all listens: 0 - float(inf)",
+    #                 get_timebound_listens(listens).head()))
+    # results.append(("listens from: 1514409713 - 1514410980",
+    #      get_timebound_listens(listens, start_time=1511203836,
+    #                            end_time=1513697746).head()))
+    # start_date = spu.date_string_to_uts("2017-05-17 22:00")
+    # end_date = spu.date_string_to_uts("2017-05-23 15:00")
+
     stop = time.time()
     for s in results:
         for e in s:
