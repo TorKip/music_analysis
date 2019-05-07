@@ -18,7 +18,7 @@
     - yes.
     
 ## Sprint 2
-### 02.04.2019 - 
+### 02.04.2019 - 07.05.2019
 - [x] Implement proper CLI tool
     - Now using Click python cli creation kit.
 - [x] Refactor program to use Pandas
@@ -38,4 +38,23 @@
         - [ ] Spotify artist_id
         - [ ] Spotify category
 </s> 
+
+## Sprint 3
+### 07.05.2019 - 
+- [ ] Implement proper unit tests
+- [ ] Set up Continuous integration
+- [ ] Make statistics entries into objects
+- [ ] Begin to implement GUI
+    - [ ] Make simple window to house UI
+- [ ] Create Spotify app for access to spotify api
+    - [ ] Decide on name for project
+    - [ ] Research app uris needed for the api
+- [ ] Create readme.md for github page
+- [ ] Implement more statistics
+    - [ ] stats-per-hour
+        - [ ] Tracks
+        - [ ] Albums
+        - [ ] Artists
+    - [ ] Listens per month
+    - [ ] Listens per day
 

@@ -120,5 +120,5 @@ def save_json_history(filename, data):
         print(er)
 
 
-if __name__ == "__main__":
-    print(date_string_to_uts("2017-12-13 17:43"))
+# if __name__ == "__main__":
+#     print(date_string_to_uts("2017-12-13 17:43"))
