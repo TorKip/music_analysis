@@ -5,6 +5,7 @@ import track_record.postprocess.stat_gen as stat_gen
 
 
 def plot_polar(stat_entry):
+    """Plots a polar graph of the stat entry"""
     data_length = len(stat_entry['data'])
     theta = np.linspace(0.0, 2 * np.pi, data_length, endpoint=False)
     radii = stat_entry['data']
@@ -20,11 +21,13 @@ def plot_polar(stat_entry):
 
 
 def plot_stat(stat_entry):
+    """Creates plots based on the stat entry"""
     if stat_entry['graph_type'] == 'polar_bar':
         plot_polar(stat_entry)
 
 
 def cool_stat_print(stat_dict):
+    """Plots all given statistics, either as graphs or text"""
     for key in stat_dict.keys():
         if not stat_dict[key]['graph']:
             print(
@@ -34,8 +37,16 @@ def cool_stat_print(stat_dict):
         else:
             plot_stat(stat_dict[key])
 
+
 def static_out():
-        print("total listens: " + str(stat_gen.count_total_listens()))
-        print("total tracks: " + str(stat_gen.count_total_tracks()))
-        print("total albums: " + str(stat_gen.count_total_albums()))
-        print("total artists: " + str(stat_gen.count_total_artists()))
+    """Basic function to print some simple statistics. 
+    
+    Prints total listens, tracks, albums and artists in db
+    """
+#     print("total listens: " + str(stat_gen.()))
+#     print("total tracks: " + str(stat_gen.count_total_tracks()))
+#     print("total albums: " + str(stat_gen.count_total_albums()))
+#     print("total artists: " + str(stat_gen.count_total_artists()))
+    for s in stat_gen.get_statistics():
+        for e in s:
+            print(e)

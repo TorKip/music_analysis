@@ -9,16 +9,18 @@ TEST_DATA = "track_record/tests/test_data.json"
 DB_FILENAME = "test_database.db"
 
 def create_test_database():
+    """Creates a temporary database for testing"""
     print("Creating test database")
     create_connection(DB_FILENAME)
 
 def delete_test_database():
+    """Deletes test database"""
     print("Deleting test_database...")
     remove(DB_FILENAME)
     print("test_database deleted.")
 
 def test_database_fill():
-    
+    """Fills database with testing data"""
     fill_database(TEST_DATA, DB_FILENAME)
     conn = sqlite3.connect(DB_FILENAME)
     cur = conn.cursor()
