@@ -26,9 +26,9 @@
     - PySimpleGUI:<br>
     Reasoning:<br>
     Actively developed and updated, supports many different options for gui, including web.
-- [ ] Implement more interesting statistics
-    - [ ] Time-bounded statistics
-    - [ ] Listens-per-hour
+- [x] Implement more interesting statistics
+    - [x] Time-bounded statistics
+    - [x] Listens-per-hour
 <s>
 - [ ] Connect to spotify:</s><b> - Moved to next sprint</b><s>
     - get the spotify id for tracks, albums and artists in the lfm history

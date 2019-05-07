@@ -1,11 +1,12 @@
 import spotipy
+import numpy as np
 import json
 from datetime import datetime
-    
+
 
 def parse_date(datestring):
     """Returns formated date
-    
+
     datestring: datetime with shape: "dd MMM yyyy, hh:mm",
     with shorthand for month eg DEC = december
 
@@ -55,8 +56,32 @@ def date_string_to_uts(datestring=None, year=None, month=None,
                       hour=int(hour),
                       minute=int(minute))
         uts_time = int(dt.timestamp())
-        
+
     return uts_time
+
+
+def uts_to_integer_hour(timestamp):
+    """Returns hour of timestamp"""
+    timezone = datetime.now().astimezone().tzinfo
+    print(timestamp)
+    print("timezone: \n-- {} --\n{}".format(timezone,
+          datetime.fromtimestamp(timestamp, tz=timezone)))
+    return datetime.fromtimestamp(timestamp, tz=timezone)
+
+
+def datestring_to_integer_hour(datestring):
+    """Returns hour of datestring of format
+    YYYY-MM-DD HH:MM
+    """
+    try:
+        # hour = np.str.split((datestring.values, " ")[1], ":")[0]
+        hour = datestring.apply(lambda e: int(e.split()[1].split(":")[0]))
+        return hour
+    except Exception as e:
+        print(str(datestring))
+        print("\n###--###\nCHECK THIS EXEPTION IN YOUR CODE:\n{}\n".format(e))
+
+    return None 
 
 
 # spotipy interfacing
@@ -69,10 +94,10 @@ def get_spotify_id(trackname="", artist="", album=""):
     # results = spotify.search(q="track:" + trackname, type="track")
     results = spotify.search(q='artist:' + artist, type='artist')
     # results = ""    # Until Spotify api is set up
+    # get_spotify_id("Sometimes")
     return results
 
 
-# get_spotify_id("Sometimes")
 def load_json_history(filename):
     """Loads filename containing json object
     returns json list or [] if read error

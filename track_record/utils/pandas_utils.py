@@ -1,4 +1,4 @@
-# import numpy as np
+import numpy as np
 import pandas as pd
 from track_record.utils import db_tools as dbt, spot_utils as spu
 import time
@@ -22,7 +22,7 @@ HISTORY_DATABASE = "history.db"
 
 
 def get_num_listens(listens=None, db_file=HISTORY_DATABASE):
-    """Returns number of listenes in the dataframe or database.
+    """Returns number of listens in the dataframe or database.
 
     If listens is set db_file will be ignored.
     """
@@ -196,31 +196,73 @@ def get_timebound_listens(original_listens, start_time=0, end_time=None):
     return result
 
 
-def get_time_bound_tracks(original_tracks, start_time=0, end_time=None,
-                          original_listens=None, listens=None):
-    """Returns a subset of the original tracks based on uts
-    timestamps or a list of listens.
+def get_listens_bound_result(other, listens):
+    """Returns a subset of the original tracks, albums or artists based on
+    a list of listens.
 
     """
-    pass
+    name = other.keys()[1]
+    
+    if name == "track_name":
+        ids = listens.track_id
+        result = other.query("id in @ids")
+    elif name == "album_name":
+        ids = listens.album_id
+        result = other.query("id in @ids")
+    elif name == "artist_name":
+        ids = listens.artist_id
+        result = other.query("id in @ids")
+    else:
+        result = other
+    return result
 
 
-def get_time_bound_albums(original_tracks, start_time=0, end_time=None,
-                          original_listens=None, listens=None):
-    """Returns a subset of the original tracks based on uts
-    timestamps or a list of listens.
-
+def get_listens_per_hour(listens):
+    """Returns a np.array of 24 dataframes, each containing listens for respective hour
+    result[0] = listens between 00:00-00:59
+    result[23] = listens between 23:00-23:59
     """
-    pass
+    results = []
+    listens_with_hour = get_hour_of_listens(listens)
+    for i in range(24):
+        results.append(listens_with_hour[listens_with_hour.hour == i])
+    #   TODO
+    return results
 
 
-def get_time_bound_artists(original_tracks, start_time=0, end_time=None,
-                           original_listens=None, listens=None):
-    """Returns a subset of the original tracks based on uts
-    timestamps or a list of listens.
-
+def get_hour_of_listens(listens):
+    """Returns hour of listen for given listen(s) as new dataframe with "hour" column
+    hour = 0 to 23
+    representing 00:00-00:59 to 23:00-23:59
     """
-    pass
+    #   TODO
+    # result = (listen, spu.uts_to_integer_hour(listen.uts_end_time))
+    listens = listens.copy()
+    listens["hour"] = spu.datestring_to_integer_hour(listens.end_time)
+    return listens
+
+
+def count_occurences_per_hour(occurences_per_hour):
+    """Returns list of tuples of shape (int(hour), int(amount_of_listens))
+
+    :listens_per_hour: should be a list of 24 dataframes,
+    with index determining what hour it belongs to (0-23)
+    """
+    result = [(i, int(occurences_per_hour[i].count(axis=0)[["id"]])) 
+              for i in range(23)]
+    return result
+
+
+# def count_listens_per_hour_groupby(listens_with_hour):
+#     """Returns list of tuples of shape (int(hour), int(amount_of_listens))
+
+#     :listens_per_hour: should be a dataframe with listens containing "hour"
+#     column
+#     """
+#     result = [(i, None) for i in range(24)]
+#     count = listens_with_hour.groupby("hour").count()
+#     # print(count)
+#     return result
 
 
 def read_db():
@@ -232,44 +274,70 @@ def read_db():
     return listens, tracks, albums, artists
 
 
-if __name__ == "__main__":
-    results = []
-    start = time.time()
-    results.append(get_num_listens())
-    results.append(get_num_tracks())
-    results.append(get_num_albums())
-    results.append(get_num_artists())
+# if __name__ == "__main__":
+#     # For testing and researching purposes
+#     results = []
+#     start = time.time()
+#     results.append(get_num_listens())
+#     results.append(get_num_tracks())
+#     results.append(get_num_albums())
+#     results.append(get_num_artists())
 
-    listens = None
-    tracks = None
-    albums = None
-    artists = None
+#     # Initialize and read in standard values from database
+#     listens = None
+#     tracks = None
+#     albums = None
+#     artists = None
+#     listens, tracks, albums, artists = read_db()
 
-    listens, tracks, albums, artists = read_db()
+#     # Test 
+#     results.append(("hour of listen of{}".format(listens),
+#                     get_hour_of_listens(listens)))
 
-    start_date = spu.date_string_to_uts("2017-05-17 22:00")
-    end_date = spu.date_string_to_uts("2017-05-23 15:00")
+#     listens_per_hour = get_listens_per_hour(listens)
+#     results.append(listens_per_hour)
+#     # start_check = time.time()
+#     artists_per_hour = get_num_albums()
+#     results.append(("amount of listens per hour is:",
+#                     count_occurences_per_hour(listens_per_hour)))
+#     # print("time for count_listens_per_hour is {:f}".format(time.time()-start_check))
+#     # start_check = time.time()
+#     # results.append(("amount of listens per hour is",
+#     #                 count_listens_per_hour_groupby(get_hour_of_listens(listens))))
+#     # print("time for count_listens_per_hour_groupby is {:f}".format(time.time()-start_check))
+#     start_date = spu.date_string_to_uts("2017-05-17 01:00")
+#     end_date = spu.date_string_to_uts("2017-05-18 23:00")
 
-    listens = get_timebound_listens(listens, start_date, end_date)
-    results.append(get_most_listened_artists(number_of_artists=3,
-                   listens=listens, artists=artists))
-    results.append(get_most_listened_albums(number_of_albums=3,
-                   listens=listens, albums=albums))
-    results.append(get_most_listened_tracks(number_of_tracks=3,
-                   listens=listens, tracks=tracks))
+#     listens = get_timebound_listens(listens, start_date, end_date)
+#     # results.append(("listens\n", listens))
 
-    # results.append((listens.head(5), type(listens),
-    #  listens["uts_end_time"].dtype))
-    # results.append(("all listens: 0 - float(inf)",
-    #                 get_timebound_listens(listens).head()))
-    # results.append(("listens from: 1514409713 - 1514410980",
-    #      get_timebound_listens(listens, start_time=1511203836,
-    #                            end_time=1513697746).head()))
-    # start_date = spu.date_string_to_uts("2017-05-17 22:00")
-    # end_date = spu.date_string_to_uts("2017-05-23 15:00")
 
-    stop = time.time()
-    for s in results:
-        for e in s:
-            print(e)
-    print(stop-start)
+#     # results.append(("", listens))
+#     # results.append(get_most_listened_artists(number_of_artists=3,
+#     #                listens=listens, artists=artists))
+#     # results.append(get_most_listened_albums(number_of_albums=3,
+#     #                listens=listens, albums=albums))
+#     # results.append(get_most_listened_tracks(number_of_tracks=3,
+#     #                listens=listens, tracks=tracks))
+#     # results.append(("tracks:\n", get_listens_bound_result(tracks,
+#     #     listens=listens)))
+#     # results.append(("albums:\n", get_listens_bound_result(albums,
+#     #     listens=listens)))
+#     # results.append(("artists:\n",get_listens_bound_result(artists,
+#     #     listens=listens)))
+#     # results.append((listens.head(5), type(listens),
+#     #  listens["uts_end_time"].dtype))
+#     # results.append(("all listens: 0 - float(inf)",
+#     #                 get_timebound_listens(listens).head()))
+#     # results.append(("listens from: 1514409713 - 1514410980",
+#     #      get_timebound_listens(listens, start_time=1511203836,
+#     #                            end_time=1513697746).head()))
+#     # start_date = spu.date_string_to_uts("2017-05-17 22:00")
+#     # end_date = spu.date_string_to_uts("2017-05-23 15:00")
+
+#     stop = time.time()
+#     for s in results:
+#         for e in s:
+#             # print(e)
+#             pass
+#     print(stop-start)
