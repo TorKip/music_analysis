@@ -109,7 +109,7 @@ def execute_query(db_filepath, sql, args):
     return result
 
 
-def add_listen(cur, end_time, track_id, album_id, artist_id, uts_end_time=0):
+def add_listen(cur, end_time, track_id, album_id, artist_id, uts_end_time):
     """Creates db entry for a listen"""
     sql = """ INSERT INTO listens(end_time, uts_end_time, track_id, album_id, artist_id)
             VALUES (?,?,?,?,?)"""
@@ -261,7 +261,7 @@ def fill_tables(json_data, db_filename):
         artist_key = artist["name"]
         album_key = artist_key + album["name"]
         track_key = album_key + track["name"]
-        listen_key = track_key + date
+        listen_key = track_key + str(uts_date)
 
         if artist_key not in artists.keys():
             artist_id = add_artist(cur, artist["name"], artist["mbid"])
@@ -276,7 +276,7 @@ def fill_tables(json_data, db_filename):
             tracks[track_key] = track_id
 
             listen_id = add_listen(cur, date, track_id, album_id,
-                                   artist_id)
+                                   artist_id, uts_end_time=uts_date)
             listens[listen_key] = listen_id
         else:
             artist_id = artists[artist["name"]]
@@ -290,8 +290,8 @@ def fill_tables(json_data, db_filename):
                                      album_id=album_id)
                 tracks[track_key] = track_id
 
-                listen_id = add_listen(cur, date, track_id, album_id, 
-                                       artist_id)
+                listen_id = add_listen(cur, date, track_id, album_id,
+                                       artist_id, uts_end_time=uts_date)
 
                 listens[listen_key] = listen_id
             else:
@@ -303,13 +303,14 @@ def fill_tables(json_data, db_filename):
                     tracks[track_key] = track_id
 
                     listen_id = add_listen(cur, date, track_id,
-                                           album_id, artist_id)
+                                           album_id, artist_id,
+                                           uts_end_time=uts_date)
                     listens[listen_key] = listen_id
                 else:
                     track_id = tracks[track_key]
 
                     if listen_key not in listens.keys():
-                        listen_id = add_listen(cur, date, track_id, 
+                        listen_id = add_listen(cur, date, track_id,
                                                album_id, artist_id,
                                                uts_end_time=uts_date)
                         listens[listen_key] = listen_id

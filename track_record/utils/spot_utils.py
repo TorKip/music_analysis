@@ -1,10 +1,12 @@
 import spotipy
+import numpy as np
 import json
-    
+from datetime import datetime
+
 
 def parse_date(datestring):
     """Returns formated date
-    
+
     datestring: datetime with shape: "dd MMM yyyy, hh:mm",
     with shorthand for month eg DEC = december
 
@@ -32,6 +34,56 @@ def parse_date(datestring):
     new_date = "{}-{}-{} {}".format(year, month, day, time)
     return new_date
 
+
+def date_string_to_uts(datestring=None, year=None, month=None,
+                       day=None, hour=None, minute=None):
+    """ Formats
+
+        Datestring: "YYYY-MM-DD HH:MM"
+
+        year: "YYYY"
+        month: "MM"
+        day: "DD"
+        time: "HH:MM"
+    """
+    uts_time = 0
+    if datestring is not None:
+        date_str, time_str = datestring.split()
+        year, month, day = date_str.split("-")
+        hour, minute = time_str.split(":")
+        print(year, month, day, hour, minute)
+        dt = datetime(year=int(year), month=int(month), day=int(day),
+                      hour=int(hour),
+                      minute=int(minute))
+        uts_time = int(dt.timestamp())
+
+    return uts_time
+
+
+def uts_to_integer_hour(timestamp):
+    """Returns hour of timestamp"""
+    timezone = datetime.now().astimezone().tzinfo
+    print(timestamp)
+    print("timezone: \n-- {} --\n{}".format(timezone,
+          datetime.fromtimestamp(timestamp, tz=timezone)))
+    return datetime.fromtimestamp(timestamp, tz=timezone)
+
+
+def datestring_to_integer_hour(datestring):
+    """Returns hour of datestring of format
+    YYYY-MM-DD HH:MM
+    """
+    try:
+        # hour = np.str.split((datestring.values, " ")[1], ":")[0]
+        hour = datestring.apply(lambda e: int(e.split()[1].split(":")[0]))
+        return hour
+    except Exception as e:
+        print(str(datestring))
+        print("\n###--###\nCHECK THIS EXEPTION IN YOUR CODE:\n{}\n".format(e))
+
+    return None 
+
+
 # spotipy interfacing
 def get_spotify_id(trackname="", artist="", album=""):
     """NOT IMPLEMENTED 
@@ -42,9 +94,10 @@ def get_spotify_id(trackname="", artist="", album=""):
     # results = spotify.search(q="track:" + trackname, type="track")
     results = spotify.search(q='artist:' + artist, type='artist')
     # results = ""    # Until Spotify api is set up
+    # get_spotify_id("Sometimes")
     return results
 
-# get_spotify_id("Sometimes")
+
 def load_json_history(filename):
     """Loads filename containing json object
     returns json list or [] if read error
@@ -57,6 +110,7 @@ def load_json_history(filename):
         history = []
     return history
 
+
 def save_json_history(filename, data):
     """Saves json data to path filename"""
     try:
@@ -64,3 +118,7 @@ def save_json_history(filename, data):
             json.dump(data, aggregated_file, indent=4, ensure_ascii=False)
     except IOError as er:
         print(er)
+
+
+if __name__ == "__main__":
+    print(date_string_to_uts("2017-12-13 17:43"))
