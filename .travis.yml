@@ -1,7 +1,7 @@
 language: python
 python:
-  - "3.7.2"
   - "3.6"
+  
 
 #safe_list
 #will be added
@@ -12,7 +12,7 @@ python:
 
 install:
   - pip install pipenv
-  - pipenv install
+  - pipenv install --python 3.6
   - pipenv shell
 
 script:
