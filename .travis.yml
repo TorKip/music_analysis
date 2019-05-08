@@ -12,8 +12,7 @@ python:
 
 install:
   - pip install pipenv
-  - pipenv install --python 3.6
-  - pipenv shell
+  - pipenv install
 
 script:
   - spot test --all
