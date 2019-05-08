@@ -15,4 +15,4 @@ install:
   - pipenv install
 
 script:
-  - spot test --all
+  - pipenv run spot test --all
