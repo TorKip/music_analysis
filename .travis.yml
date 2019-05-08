@@ -3,14 +3,16 @@ python:
   - "3.7"
 
 #safe_list
-branches:
-  only:
-  - master
-  - /^(?i:sprint)_.*$/
+#will be added
+# branches:
+#   only:
+#   - master
+#   - /^(?i:sprint)_.*$/
 
 install:
   - pip install pipenv
-  - pipenv install
+  - pipenv install --python 3.7
+  - pipenv shell
 
 script:
   - spot test --all
