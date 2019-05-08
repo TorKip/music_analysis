@@ -13,6 +13,9 @@ python:
 install:
   - pip install pipenv
   - pipenv install
+  - pip install -r Pipfile.lock
 
 script:
-  - pipenv run spot test --all
+  # - spot test --all
+  - pip list
+  - pipenv graph
