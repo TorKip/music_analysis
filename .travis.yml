@@ -1,7 +1,10 @@
 language: python
-python:
-  - "3.6"
   
+matrix:
+  include:
+    -name: "Python 3.7"
+    python: 3.7
+    dist: xenial
 
 #safe_list
 #will be added
@@ -11,11 +14,9 @@ python:
 #   - /^(?i:sprint)_.*$/
 
 install:
-  - pip install pipenv
-  - pipenv install
-  - pip install -r Pipfile.lock
+  - pip install -r requirements.txt
 
 script:
   # - spot test --all
   - pip list
-  - pipenv graph
+  - spot test --all
