@@ -1,6 +1,8 @@
+"""Module used for visualizing statistics
+"""
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
+# import pandas as pd
 import track_record.postprocess.stat_gen as stat_gen
 
 
@@ -10,13 +12,13 @@ def plot_polar(stat_entry):
     theta = np.linspace(0.0, 2 * np.pi, data_length, endpoint=False)
     radii = stat_entry['data']
     width = 2 * np.pi / data_length
-    ax = plt.subplot(111, projection='polar')
+    axis = plt.subplot(111, projection='polar')
     labels = ["{}:00 - {}:00".format(x, x+1) for x in range(0, 24, 3)]
-    ax.set_xticklabels(labels)
-    ax.set_theta_direction(-1)
-    ax.set_theta_offset(np.pi/2)
+    axis.set_xticklabels(labels)
+    axis.set_theta_direction(-1)
+    axis.set_theta_offset(np.pi/2)
     # bars = ax.bar(theta, radii, width=width, bottom=0.0)
-    ax.bar(theta, radii, width=width, bottom=0.0)
+    axis.bar(theta, radii, width=width, bottom=0.0)
     plt.show()
 
 
@@ -39,14 +41,14 @@ def cool_stat_print(stat_dict):
 
 
 def static_out():
-    """Basic function to print some simple statistics. 
-    
+    """Basic function to print some simple statistics.
+
     Prints total listens, tracks, albums and artists in db
     """
 #     print("total listens: " + str(stat_gen.()))
 #     print("total tracks: " + str(stat_gen.count_total_tracks()))
 #     print("total albums: " + str(stat_gen.count_total_albums()))
 #     print("total artists: " + str(stat_gen.count_total_artists()))
-    for s in stat_gen.get_statistics():
-        for e in s:
-            print(e)
+    for stat in stat_gen.get_statistics():
+        for element in stat:
+            print(element)
