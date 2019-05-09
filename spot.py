@@ -28,7 +28,7 @@ def test(all):
     """Runs tests based on given options"""
     if all:
         test_main.run_all()
-    click.echo(all)
+#     click.echo(all)
 
 
 @click.command('postprocess', help="Process music history")
