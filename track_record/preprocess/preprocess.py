@@ -1,3 +1,5 @@
+"""Module performs preprocessing on data, cleaning and saving.
+"""
 from track_record.utils.spot_utils import load_json_history
 from track_record.utils.spot_utils import save_json_history
 from track_record.utils.spot_utils import parse_date
@@ -40,9 +42,9 @@ def clean_lfm_data(lfm_history):
                 "artist_id": artist["mbid"]
             }
             clean_history.append(clean_entry)
-    except TypeError as te:
+    except TypeError as type_error:
         print("Could not clean data due to:")
-        print(te, "\nRaw data might not be on lastfm format.")
+        print(type_error, "\nRaw data might not be on lastfm format.")
     return clean_history
 
 

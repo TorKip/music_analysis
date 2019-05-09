@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -11,6 +11,8 @@ spotipy = "*"
 pandas = "*"
 click = "*"
 "urllib3" = "*"
+spotifyanalysis = {editable = true, path = "."}
+sqlalchemy = "*"
 
 [dev-packages]
 pylint = "*"

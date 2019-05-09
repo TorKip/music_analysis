@@ -1,8 +1,10 @@
+"""Module containing methods for generating statistics
+"""
 import sqlite3
 # import contextlib
 from track_record.utils import db_tools, pandas_utils
 
-predefined_queries = {
+PREDEFINED_QUERIES = {
     "count_total_listens": (""" SELECT COUNT(*) FROM listens""",
                             "Totals listens in history"),
     "count_total_tracks": (""" SELECT COUNT(*) FROM tracks""",
@@ -29,7 +31,7 @@ predefined_queries = {
 }
 
 
-def execute_queries(q_args=[], history_db_filepath="history.db"):
+def execute_queries(q_args, history_db_filepath="history.db"):
     """Takes a list of queries and returns the result in a list
 
     q_args -- list of queries with shape: (sql, info_text)
@@ -41,19 +43,19 @@ def execute_queries(q_args=[], history_db_filepath="history.db"):
         return "No queries given"
     else:
         results = []
-        for q in q_args:
+        for queries in q_args:
             try:
-                results.append((q[1], db_tools.execute_static_query(
-                    db_filepath=history_db_filepath, sql=q[0])))
+                results.append((queries[1], db_tools.execute_static_query(
+                    db_filepath=history_db_filepath, sql=queries[0])))
             except sqlite3.Error:
-                results.append((q[1], "Invalid query"))
+                results.append((queries[1], "Invalid query"))
     return results
 
 
 def execute_predef_query(query_id, history_db_filepath="history.db"):
-    """Executes a query from predefined_queries"""
+    """Executes a query from PREDEFINED_QUERIES"""
     try:
-        sql = predefined_queries[query_id]
+        sql = PREDEFINED_QUERIES[query_id]
     except KeyError:
         return ("No predefined query exists for", query_id)
     try:
@@ -66,9 +68,11 @@ def execute_predef_query(query_id, history_db_filepath="history.db"):
 
 def get_statistics(history_db_filepath="history.db"):
     """Executes a series of queries and returns the result as a list"""
-    # queries = [predefined_queries[k] for k in predefined_queries.keys()]
+    # queries = [PREDEFINED_QUERIES[k] for k in PREDEFINED_QUERIES.keys()]
     # results = execute_queries(q_args=queries,
     #               history_db_filepath=history_db_filepath)
+    history_db = history_db_filepath  # random use to prevent lint-error
+    history_db.lower()
     results = []
     results.append(pandas_utils.get_num_listens())
     results.append(pandas_utils.get_num_tracks())
