@@ -12,6 +12,7 @@ pandas = "*"
 click = "*"
 "urllib3" = "*"
 spotifyanalysis = {editable = true, path = "."}
+sqlalchemy = "*"
 
 [dev-packages]
 pylint = "*"
