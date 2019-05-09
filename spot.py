@@ -19,8 +19,9 @@ def cli():
     """Entry point for the general program"""
     pass
 
+
 @click.command(help="Run tests")
-@click.option('-A','--all', 
+@click.option('-A', '--all',
               help="Run all tests", is_flag=True, default=False)
 # @click.argument("tests", nargs=1)
 def test(all):

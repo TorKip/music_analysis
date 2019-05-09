@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6f24e38795dbb3304d33929a1a94034c57fb0518f0f8237a29564feaf6e01239"
+            "sha256": "e1cc995cf5b772aab1c4452ce394de5667b168f4b6a8176c816cc503da7c00d3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -232,7 +232,7 @@
         },
         "spotifyanalysis": {
             "editable": true,
-            "path": "./../SpotifyAnalysis"
+            "path": "."
         },
         "spotipy": {
             "hashes": [

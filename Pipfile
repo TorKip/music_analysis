@@ -11,7 +11,7 @@ spotipy = "*"
 pandas = "*"
 click = "*"
 "urllib3" = "*"
-spotifyanalysis = {editable = true, path = "./../SpotifyAnalysis"}
+spotifyanalysis = {editable = true, path = "."}
 
 [dev-packages]
 pylint = "*"
