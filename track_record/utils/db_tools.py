@@ -45,14 +45,16 @@ SQLITE_CREATE_SPOTIFY_LISTENS_TABLE = """ CREATE TABLE IF NOT EXISTS listens (
 
 
 def create_connection(db_file):
-    """ create database connection to SQlite database """
+    """TODO: CHANGE PRINT STATEMENTS TO LOGGING
+    create database connection to SQlite database 
+    """
     try:
         conn = sqlite3.connect(db_file)
-        print("sqlite version: " + sqlite3.version)
+        # print("sqlite version: " + sqlite3.version)
         create_tables(conn)
         cursor = conn.cursor()
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        print(cursor.fetchall())
+        # print(cursor.fetchall())
         conn.close()
     except Error as e:
         print(e)
@@ -118,7 +120,7 @@ def add_listen(cur, end_time, track_id, album_id, artist_id, uts_end_time):
     return cur.lastrowid
 
 
-def add_track(cur, track_name, mbid="", spid="", album_id=None):
+def add_track(cur, track_name, album_id, mbid="", spid=""):
     """Creates db entry for a track"""
     sql = """ INSERT INTO tracks(track_name, mbid, spid, album_id)
         VALUES(?,?,?,?) """
@@ -127,7 +129,7 @@ def add_track(cur, track_name, mbid="", spid="", album_id=None):
     return cur.lastrowid
 
 
-def add_album(cur, album_name, mbid="", spid="", artist_id=None):
+def add_album(cur, album_name, artist_id, mbid="", spid=""):
     """Creates db entry for an album"""
     sql = """ INSERT INTO albums(album_name, mbid, spid, artist_id)
             VALUES (?,?,?,?) """
@@ -240,10 +242,17 @@ def get_all_data_ids(cur):
     return artist_key_dict, album_key_dict, track_key_dict, listen_key_dict
 
 
-def fill_tables(json_data, db_filename):
+def fill_tables(json_data, db_filename=None, cursor=None):
     """Fills db with data, checking if it already exists in db"""
-    conn = sqlite3.connect(db_filename)
-    cur = conn.cursor()
+    manual_db = False
+    if cursor is not None:
+        cur = cursor
+    elif db_filename is not None:
+        conn = sqlite3.connect(db_filename)
+        cur = conn.cursor()
+        manual_db=True
+    else:
+        return False
     tracks = {}
     albums = {}
     artists = {}
@@ -267,12 +276,12 @@ def fill_tables(json_data, db_filename):
             artist_id = add_artist(cur, artist["name"], artist["mbid"])
             artists[artist_key] = artist_id
 
-            album_id = add_album(cur, album["name"], album["mbid"],
-                                 artist_id=artist_id)
+            album_id = add_album(cur, album["name"], artist_id=artist_id,
+                mbid=album["mbid"])
             albums[album_key] = album_id
 
-            track_id = add_track(cur, track["name"], track["mbid"],
-                                 album_id=album_id)
+            track_id = add_track(cur, track["name"], album_id=album_id,
+                mbid=track["mbid"])
             tracks[track_key] = track_id
 
             listen_id = add_listen(cur, date, track_id, album_id,
@@ -282,12 +291,12 @@ def fill_tables(json_data, db_filename):
             artist_id = artists[artist["name"]]
 
             if album_key not in albums.keys():
-                album_id = add_album(cur, album["name"], album["mbid"],
-                                     artist_id=artist_id)
+                album_id = add_album(cur, album["name"], artist_id=artist_id,
+                    mbid=album["mbid"])
                 albums[album_key] = album_id
 
-                track_id = add_track(cur, track["name"], track["mbid"],
-                                     album_id=album_id)
+                track_id = add_track(cur, track["name"], album_id=album_id,
+                    mbid=track["mbid"])
                 tracks[track_key] = track_id
 
                 listen_id = add_listen(cur, date, track_id, album_id,
@@ -298,8 +307,8 @@ def fill_tables(json_data, db_filename):
                 album_id = albums[album_key]
 
                 if track_key not in tracks.keys():
-                    track_id = add_track(cur, track["name"], track["mbid"],
-                                         album_id=album_id)
+                    track_id = add_track(cur, track["name"], album_id=album_id,
+                        mbid=track["mbid"])
                     tracks[track_key] = track_id
 
                     listen_id = add_listen(cur, date, track_id,
@@ -316,6 +325,6 @@ def fill_tables(json_data, db_filename):
                         listens[listen_key] = listen_id
                     else:
                         listen_id = listens[listen_key]
-
-    conn.commit()
-    conn.close()
+    if manual_db:
+        conn.commit()
+        conn.close()

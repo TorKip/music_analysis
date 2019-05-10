@@ -42,14 +42,14 @@
 ## Sprint 3
 ### 07.05.2019 - 
 - [ ] Implement proper unit tests
-- [ ] Set up Continuous integration
+- [x] Set up Continuous integration
 - [ ] Make statistics entries into objects
 - [ ] Begin to implement GUI
     - [ ] Make simple window to house UI
 - [ ] Create Spotify app for access to spotify api
     - [ ] Decide on name for project
     - [ ] Research app uris needed for the api
-- [ ] Create readme.md for github page
+- [x] Create readme.md for github page
 - [ ] Implement more statistics
     - [ ] stats-per-hour
         - [ ] Tracks
