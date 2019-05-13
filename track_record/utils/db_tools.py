@@ -154,7 +154,7 @@ def get_artists(cur, artist_id=None):
         cur.execute(sql)
     else:
         sql = """ SELECT * from artists WHERE id=?"""
-        cur.execute(sql, artist_id)
+        cur.execute(sql, str(artist_id))
     return cur.fetchall()
 
 
@@ -165,7 +165,7 @@ def get_albums(cur, album_id=None):
         cur.execute(sql)
     else:
         sql = """ SELECT * from albums WHERE id=?"""
-        cur.execute(sql, album_id)
+        cur.execute(sql, str(album_id))
     return cur.fetchall()
 
 
@@ -176,7 +176,7 @@ def get_tracks(cur, track_id=None):
         cur.execute(sql)
     else:
         sql = """ SELECT * from tracks WHERE id=?"""
-        cur.execute(sql, track_id)
+        cur.execute(sql, str(track_id))
     return cur.fetchall()
 
 
@@ -187,7 +187,7 @@ def get_listens(cur, id=None):
         cur.execute(sql)
     else:
         sql = """ SELECT * from listens where id=?"""
-        cur.execute(sql, id)
+        cur.execute(sql, str(id))
     return cur.fetchall()
 
 
@@ -250,7 +250,7 @@ def fill_tables(json_data, db_filename=None, cursor=None):
     elif db_filename is not None:
         conn = sqlite3.connect(db_filename)
         cur = conn.cursor()
-        manual_db=True
+        manual_db = True
     else:
         return False
     tracks = {}
