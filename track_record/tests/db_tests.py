@@ -47,13 +47,15 @@ import track_record.utils.db_tools as dbt
 #     print("artists:\n{}\n".format(artists))
 
 def db_tool_suite():
+    load_testCase = unittest.TestLoader.loadTestsFromTestCase
+    test_loader = unittest.defaultTestLoader
     suite = unittest.TestSuite()
-    suite.addTests(unittest.TestLoader.loadTestsFromTestCase(
-        unittest.defaultTestLoader, TestDatabaseConnections))
-    suite.addTest(unittest.TestLoader.loadTestsFromTestCase(
-        unittest.defaultTestLoader, TestDatabaseInput))
-    suite.addTest(unittest.TestLoader.loadTestsFromTestCase(
-        unittest.defaultTestLoader, TestDatabaseReading))
+    suite.addTests(load_testCase(
+        test_loader, TestDatabaseConnections))
+    suite.addTest(load_testCase(
+        test_loader, TestDatabaseInput))
+    suite.addTest(load_testCase(
+        test_loader, TestDatabaseReading))
     return suite
 
 
