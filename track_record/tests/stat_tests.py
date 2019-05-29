@@ -66,7 +66,7 @@ class TestStatistics(unittest.TestCase):
             listens=self.listens)[1], 15)
         self.assertEqual(pdut.get_num_listens(
             db_file=self.database_name)[1], 15)
-        self.assertNotEqual(pdut.get_num_listens()[1], 15)
+        # self.assertNotEqual(pdut.get_num_listens()[1], 15)
         # self.assertEqual(True, False)
 
     def test_pandas_num_tracks(self):

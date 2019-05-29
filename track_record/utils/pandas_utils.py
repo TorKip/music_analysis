@@ -1,7 +1,9 @@
+"""Module containing methods for pandas processing of data"""
+import time
 import numpy as np
 import pandas as pd
 from track_record.utils import db_tools as dbt, spot_utils as spu
-import time
+from sqlalchemy.exc import InvalidRequestError
 
 
 HISTORY_DATABASE = "history.db"
@@ -28,8 +30,14 @@ def get_num_listens(listens=None, db_file=HISTORY_DATABASE):
     """
     description = "Total number of listens in dataset"
     if listens is None:
-        engine = dbt.get_connectable(db_file)
-        listens = pd.read_sql_table("listens", con=engine)
+        try:
+            engine = dbt.get_connectable(db_file)
+            listens = pd.read_sql_table("listens", con=engine)
+        except (InvalidRequestError, ValueError) as e:
+            description = "Error: {}".format(e) + description
+            column_names = ["id", "track_id", "album_id",
+                "artist_id", "end_time", "uts_end_time"]
+            listens = pd.DataFrame(columns=column_names)
     num_listens = listens.id.nunique()
     return (description, num_listens)
 
@@ -41,8 +49,14 @@ def get_num_tracks(tracks=None, db_file=HISTORY_DATABASE):
     """
     description = "Number of unique tracks in dataset"
     if tracks is None:
-        engine = dbt.get_connectable(db_file)
-        tracks = pd.read_sql_table("tracks", con=engine)
+        try:
+            engine = dbt.get_connectable(db_file)
+            tracks = pd.read_sql_table("tracks", con=engine)
+        except (InvalidRequestError, ValueError) as e:
+            description = "Error: {}".format(e) + description
+            column_names = ["id", "track_name", "mbid",
+                "spid", "album_id"]
+            tracks = pd.DataFrame(columns=column_names)
     num_tracks = tracks.id.nunique()
     return (description, num_tracks)
 
@@ -54,8 +68,14 @@ def get_num_albums(albums=None, db_file=HISTORY_DATABASE):
     """
     description = "Number of unique albums in dataset"
     if albums is None:
-        engine = dbt.get_connectable(db_file)
-        albums = pd.read_sql_table("albums", con=engine)
+        try:
+            engine = dbt.get_connectable(db_file)
+            albums = pd.read_sql_table("albums", con=engine)
+        except (InvalidRequestError, ValueError) as e:
+            description = "Error: {}".format(e) + description
+            column_names = ["id", "album_name", "mbid",
+                "spid", "artist_id"]
+            albums = pd.DataFrame(columns=column_names)
     num_albums = albums.id.nunique()
     return (description, num_albums)
 
@@ -67,8 +87,14 @@ def get_num_artists(artists=None, db_file=HISTORY_DATABASE):
     """
     description = "Number of unique artists in dataset"
     if artists is None:
-        engine = dbt.get_connectable(db_file)
-        artists = pd.read_sql_table("artists", con=engine)
+        try:
+            engine = dbt.get_connectable(db_file)
+            artists = pd.read_sql_table("artists", con=engine)
+        except (InvalidRequestError, ValueError) as e:
+            description = "Error: {}".format(e) + description
+            column_names = ["id", "artist_name", "mbid",
+                "spid", "misc"]
+            artists = pd.DataFrame(columns=column_names)
     num_artists = artists.id.nunique()
     return (description, num_artists)
 
