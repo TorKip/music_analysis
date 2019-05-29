@@ -41,7 +41,7 @@
 
 ## Sprint 3
 ### 07.05.2019 - 
-- [ ] Implement proper unit tests
+- [x] Implement proper unit tests
 - [x] Set up Continuous integration
 - [ ] Make statistics entries into objects
 - [ ] Begin to implement GUI

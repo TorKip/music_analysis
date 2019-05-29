@@ -1,4 +1,5 @@
 import click
+import sys
 import track_record.tests.test_main as test_main
 from track_record.postprocess import aggregate as aggregate_history,\
         visualize as visualize_history
@@ -27,8 +28,11 @@ def cli():
 def test(all):
     """Runs tests based on given options"""
     if all:
-        test_main.run_all()
-#     click.echo(all)
+        exit_code = test_main.run_all()
+        if not exit_code == 0:
+            sys.exit(exit_code)
+        click.echo("testing done")
+    
 
 
 @click.command('postprocess', help="Process music history")

@@ -189,10 +189,10 @@ def get_timebound_listens(original_listens, start_time=0, end_time=None):
     """
     listens = original_listens.copy()
     if end_time is None:
-        result = listens[(listens["uts_end_time"] > start_time)]
+        result = listens[(listens["uts_end_time"] >= start_time)]
     else:
-        result = listens[(listens["uts_end_time"] > start_time)
-                         & (listens["uts_end_time"] < end_time)]
+        result = listens[(listens["uts_end_time"] >= start_time)
+                         & (listens["uts_end_time"] <= end_time)]
     return result
 
 
@@ -265,8 +265,8 @@ def count_occurences_per_hour(occurences_per_hour):
 #     return result
 
 
-def read_db():
-    engine = dbt.get_connectable(HISTORY_DATABASE)
+def read_db(db_path=HISTORY_DATABASE):
+    engine = dbt.get_connectable(db_path)
     listens = pd.read_sql_table("listens", con=engine)
     tracks = pd.read_sql_table("tracks", con=engine)
     albums = pd.read_sql_table("albums", con=engine)
